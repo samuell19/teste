@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Convite para um date</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #2f2430;
+        --muted: #745d68;
+        --paper: #fff9f6;
+        --rose: #df6f87;
+        --rose-deep: #ad3f62;
+        --mint: #7ba88c;
+        --sky: #b8d8e3;
+        --gold: #dba84f;
+        --shadow: 0 24px 70px rgba(61, 34, 47, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(135deg, rgba(184, 216, 227, 0.82), rgba(255, 249, 246, 0.92) 42%, rgba(244, 196, 202, 0.86)),
+          repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.34) 0 1px, transparent 1px 15px);
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .invite {
+        position: relative;
+        width: min(100%, 760px);
+        min-height: min(760px, calc(100vh - 56px));
+        overflow: hidden;
+        border: 1px solid rgba(173, 63, 98, 0.18);
+        border-radius: 24px;
+        background:
+          linear-gradient(rgba(255, 249, 246, 0.86), rgba(255, 249, 246, 0.86)),
+          url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1400&q=80");
+        background-position: center;
+        background-size: cover;
+        box-shadow: var(--shadow);
+        isolation: isolate;
+      }
+
+      .invite::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border: 1px solid rgba(173, 63, 98, 0.25);
+        border-radius: 18px;
+        pointer-events: none;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+        min-height: inherit;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 28px;
+        padding: clamp(28px, 7vw, 64px);
+      }
+
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted);
+        font-size: clamp(0.78rem, 2vw, 0.92rem);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .seal {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        aspect-ratio: 1;
+        border: 1px solid rgba(173, 63, 98, 0.28);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.56);
+        color: var(--rose-deep);
+        font-family: Georgia, serif;
+        font-size: 1.7rem;
+        line-height: 1;
+      }
+
+      main {
+        align-self: center;
+        max-width: 620px;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 10ch;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3.4rem, 11vw, 7rem);
+        line-height: 0.9;
+        font-weight: 700;
+        color: var(--rose-deep);
+      }
+
+      .lead {
+        margin: 26px 0 0;
+        max-width: 40rem;
+        color: var(--ink);
+        font-size: clamp(1.08rem, 2.6vw, 1.38rem);
+        line-height: 1.55;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin: 34px 0 0;
+      }
+
+      .detail {
+        min-height: 92px;
+        padding: 16px;
+        border: 1px solid rgba(173, 63, 98, 0.16);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.58);
+        backdrop-filter: blur(10px);
+      }
+
+      .label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .value {
+        display: block;
+        margin-top: 9px;
+        color: var(--ink);
+        font-size: clamp(0.98rem, 2.2vw, 1.12rem);
+        line-height: 1.2;
+        font-weight: 760;
+      }
+
+      .answer-row {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin-top: 30px;
+        min-height: 64px;
+      }
+
+      button,
+      .tiny-note {
+        font: inherit;
+      }
+
+      .yes {
+        min-height: 48px;
+        border: 0;
+        border-radius: 999px;
+        padding: 0 22px;
+        background: var(--rose-deep);
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(173, 63, 98, 0.24);
+        cursor: pointer;
+        font-weight: 800;
+        transform-origin: center;
+        transition:
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          padding 180ms ease;
+      }
+
+      .yes.is-glowing {
+        padding-inline: 30px;
+        transform: scale(1.05);
+        box-shadow:
+          0 16px 30px rgba(173, 63, 98, 0.28),
+          0 0 0 7px rgba(223, 111, 135, 0.12);
+      }
+
+      .maybe {
+        min-height: 48px;
+        border: 1px solid rgba(47, 36, 48, 0.18);
+        border-radius: 999px;
+        padding: 0 18px;
+        background: rgba(255, 255, 255, 0.58);
+        color: var(--ink);
+        cursor: pointer;
+        font-weight: 750;
+        position: relative;
+        z-index: 2;
+        transform: translate(var(--run-x, 0), var(--run-y, 0)) rotate(var(--run-r, 0));
+        transition:
+          transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          background 180ms ease,
+          color 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease;
+        touch-action: manipulation;
+        white-space: nowrap;
+      }
+
+      .maybe.is-running {
+        border-color: rgba(173, 63, 98, 0.28);
+        background: rgba(255, 255, 255, 0.76);
+        box-shadow: 0 12px 22px rgba(61, 34, 47, 0.12);
+      }
+
+      .maybe.is-surrendered {
+        border-color: transparent;
+        background: var(--rose);
+        color: #fff;
+        transform: translate(0, 0) rotate(-2deg);
+      }
+
+      .yes:focus-visible,
+      .maybe:focus-visible {
+        outline: 3px solid rgba(123, 168, 140, 0.55);
+        outline-offset: 3px;
+      }
+
+      .tiny-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 12px 0 0;
+        min-height: 24px;
+        color: var(--rose-deep);
+        font-weight: 800;
+      }
+
+      .note-sticker {
+        display: none;
+        width: 28px;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        object-fit: cover;
+        transform: rotate(4deg) translateY(-1px);
+        filter: drop-shadow(0 5px 7px rgba(61, 34, 47, 0.14));
+      }
+
+      .tiny-note.has-sticker .note-sticker {
+        display: inline-block;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+        color: var(--muted);
+        font-size: clamp(0.88rem, 2vw, 0.98rem);
+        line-height: 1.45;
+      }
+
+      .refusal-line {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+      }
+
+      .refusal-sticker {
+        width: clamp(42px, 8vw, 64px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border-radius: 12px;
+        object-fit: cover;
+        transform: rotate(-7deg) translateY(-2px);
+        filter: drop-shadow(0 10px 12px rgba(61, 34, 47, 0.16));
+      }
+
+      .signature {
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.5rem, 4vw, 2.3rem);
+      }
+
+      .flowers {
+        display: grid;
+        grid-template-columns: repeat(3, 28px);
+        gap: 8px;
+        transform: rotate(-5deg);
+      }
+
+      .flower {
+        position: relative;
+        width: 28px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--rose);
+      }
+
+      .flower::before,
+      .flower::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: inherit;
+      }
+
+      .flower::before {
+        transform: rotate(60deg);
+      }
+
+      .flower::after {
+        transform: rotate(120deg);
+      }
+
+      .flower:nth-child(2) {
+        background: var(--gold);
+      }
+
+      .flower:nth-child(3) {
+        background: var(--mint);
+      }
+
+      .flower span {
+        position: absolute;
+        inset: 9px;
+        z-index: 1;
+        border-radius: 999px;
+        background: #fff9f6;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: 14px;
+        }
+
+        .invite {
+          min-height: calc(100vh - 28px);
+          border-radius: 18px;
+        }
+
+        .invite::before {
+          inset: 12px;
+          border-radius: 13px;
+        }
+
+        .content {
+          padding: 26px;
+        }
+
+        .topline {
+          align-items: start;
+        }
+
+        .details {
+          grid-template-columns: 1fr;
+        }
+
+        .detail {
+          min-height: auto;
+        }
+
+        .answer-row {
+          min-height: 118px;
+        }
+
+        .maybe {
+          max-width: 100%;
+        }
+
+        footer {
+          align-items: start;
+        }
+
+        .refusal-line {
+          align-items: center;
+          max-width: 210px;
+        }
+
+        .refusal-sticker {
+          width: 44px;
+          border-radius: 10px;
+        }
+
+        .flowers {
+          grid-template-columns: repeat(3, 22px);
+          gap: 6px;
+        }
+
+        .flower {
+          width: 22px;
+        }
+
+        .flower span {
+          inset: 7px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <article class="invite" aria-label="Convite para um date">
+      <div class="content">
+        <header class="topline">
+          
+        </header>
+
+        <main>
+          <h1>Oiii, vamos sair?</h1>
+          <p class="lead">
+            Domingo a noite é depressivo mas a gente pode fazer ficar legal... quer sair comigo pra um jantarzinho bacana?
+          </p>
+
+          <section class="details" aria-label="Detalhes do convite">
+            <div class="detail">
+              <span class="label">Quando</span>
+              <span class="value">Domingo, 19h</span>
+            </div>
+            <div class="detail">
+              <span class="label">Onde</span>
+              <span class="value">Yoshi Ya</span>
+            </div>
+            <div class="detail">
+              <span class="label">Tem que levar</span>
+              <span class="value">Sua presença</span>
+            </div>
+          </section>
+
+          <div class="answer-row">
+            <button class="yes" type="button">Simm, vamos😊</button>
+            <button class="maybe" type="button" aria-describedby="decline-note">Não vou conseguir😔</button>
+          </div>
+          <p class="tiny-note" id="decline-note" aria-live="polite">
+            <span class="note-text"></span>
+            <img
+              class="note-sticker"
+              src="assets/sticker-pergunta.webp"
+              alt=""
+              aria-hidden="true"
+            />
+          </p>
+        </main>
+
+        <footer>
+          <span class="refusal-line">
+            <img
+              class="refusal-sticker"
+              src="assets/sticker-recusa.webp"
+              alt=""
+              aria-hidden="true"
+            />
+            <span>E não pode recusar, viu.</span>
+          </span>
+          
+          <span class="flowers" aria-hidden="true">
+            <span class="flower"><span></span></span>
+            <span class="flower"><span></span></span>
+            <span class="flower"><span></span></span>
+          </span>
+        </footer>
+      </div>
+    </article>
+
+    <script>
+      const yes = document.querySelector(".yes");
+      const maybe = document.querySelector(".maybe");
+      const note = document.querySelector(".tiny-note");
+      const noteText = document.querySelector(".note-text");
+      const escapeMoves = [
+        { x: 42, y: -18, r: "3deg", text: "Não tem como recusar.." },
+        { x: -34, y: 22, r: "-4deg", text: "Já falei que não tem como🙄" },
+        { x: 58, y: 26, r: "5deg", text: "Melhor apertar o sim logo.." },
+        { x: 0, y: 0, r: "-2deg", text: "Simm, a gente vai" },
+      ];
+      let declineAttempts = 0;
+
+      yes.addEventListener("click", () => {
+        note.classList.remove("has-sticker");
+        noteText.textContent = "ebaa, a gente se encontra lá e come bastante😋.";
+        yes.classList.add("is-glowing");
+        maybe.classList.remove("is-running");
+      });
+
+      function updateDeclineGame() {
+        const index = Math.min(declineAttempts, escapeMoves.length) - 1;
+        const move = escapeMoves[Math.max(index, 0)];
+
+        maybe.classList.add("is-running");
+        maybe.style.setProperty("--run-x", `${move.x}px`);
+        maybe.style.setProperty("--run-y", `${move.y}px`);
+        maybe.style.setProperty("--run-r", move.r);
+        maybe.textContent = move.text;
+        note.classList.add("has-sticker");
+        noteText.textContent = "Tá querendo recusar por que?";
+
+        if (declineAttempts >= 4) {
+          maybe.classList.add("is-surrendered");
+          yes.classList.add("is-glowing");
+          maybe.setAttribute("aria-label", "Aceitar o convite");
+        }
+      }
+
+      function tryDecline(event) {
+        event.preventDefault();
+
+        if (declineAttempts >= 4) {
+          yes.click();
+          return;
+        }
+
+        declineAttempts += 1;
+        updateDeclineGame();
+      }
+
+      maybe.addEventListener("click", tryDecline);
+    </script>
+  </body>
+</html>
