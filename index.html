@@ -417,7 +417,7 @@
         </header>
 
         <main>
-          <h1>Oiii, vamos sair?</h1>
+          <h1>Oiii, quer sair comigo?</h1>
           <p class="lead">
             Domingo a noite é depressivo mas a gente pode fazer ficar legal... quer sair comigo pra um jantarzinho bacana?
           </p>
@@ -477,6 +477,7 @@
       const maybe = document.querySelector(".maybe");
       const note = document.querySelector(".tiny-note");
       const noteText = document.querySelector(".note-text");
+      const formEndpoint = "https://formspree.io/f/mojgpvoy";
       const escapeMoves = [
         { x: 42, y: -18, r: "3deg", text: "Não tem como recusar.." },
         { x: -34, y: 22, r: "-4deg", text: "Já falei que não tem como🙄" },
@@ -484,12 +485,75 @@
         { x: 0, y: 0, r: "-2deg", text: "Simm, a gente vai" },
       ];
       let declineAttempts = 0;
+      let acceptedSent = false;
+      let declineSent = false;
 
-      yes.addEventListener("click", () => {
+      async function notifyAcceptance() {
+        if (acceptedSent) {
+          return true;
+        }
+
+        try {
+          const response = await fetch(formEndpoint, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              resposta: "aceitou",
+              convite: "date",
+              quando: "Domingo, 19h",
+              onde: "Yoshi Ya",
+              mensagem: "Ela clicou em Simm, vamos",
+            }),
+          });
+
+          acceptedSent = response.ok;
+          return response.ok;
+        } catch {
+          return false;
+        }
+      }
+
+      async function notifyFirstDecline() {
+        if (declineSent) {
+          return;
+        }
+
+        declineSent = true;
+
+        try {
+          await fetch(formEndpoint, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              resposta: "tentou recusar",
+              convite: "date",
+              quando: "Domingo, 19h",
+              onde: "Yoshi Ya",
+              tentativa: 1,
+              mensagem: "Ela clicou em Não vou conseguir",
+            }),
+          });
+        } catch {
+          declineSent = false;
+        }
+      }
+
+      yes.addEventListener("click", async () => {
         note.classList.remove("has-sticker");
-        noteText.textContent = "ebaa, a gente se encontra lá e come bastante😋.";
+        noteText.textContent = "ebaa, a gente se encontra lá e come bastante😋. avisando aqui...";
         yes.classList.add("is-glowing");
         maybe.classList.remove("is-running");
+
+        const notified = await notifyAcceptance();
+        noteText.textContent = notified
+          ? "ebaa, a gente se encontra lá e come bastante😋."
+          : "ebaa, a gente se encontra lá e come bastante😋.";
       });
 
       function updateDeclineGame() {
@@ -517,6 +581,10 @@
         if (declineAttempts >= 4) {
           yes.click();
           return;
+        }
+
+        if (declineAttempts === 0) {
+          notifyFirstDecline();
         }
 
         declineAttempts += 1;
