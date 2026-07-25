@@ -24,6 +24,7 @@
 
       body {
         min-height: 100vh;
+        min-height: 100svh;
         margin: 0;
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -35,6 +36,7 @@
         display: grid;
         place-items: center;
         padding: 28px;
+        overflow-x: hidden;
       }
 
       .invite {
@@ -82,6 +84,10 @@
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
+      }
+
+      .topline:empty {
+        display: none;
       }
 
       .seal {
@@ -215,6 +221,7 @@
           box-shadow 180ms ease;
         touch-action: manipulation;
         white-space: nowrap;
+        text-align: center;
       }
 
       .maybe.is-running {
@@ -240,10 +247,12 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
+        max-width: 100%;
         margin: 12px 0 0;
         min-height: 24px;
         color: var(--rose-deep);
         font-weight: 800;
+        line-height: 1.35;
       }
 
       .note-sticker {
@@ -263,6 +272,7 @@
       footer {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         gap: 20px;
         align-items: end;
         color: var(--muted);
@@ -343,11 +353,13 @@
 
       @media (max-width: 680px) {
         body {
-          padding: 14px;
+          display: block;
+          padding: 10px;
         }
 
         .invite {
-          min-height: calc(100vh - 28px);
+          width: 100%;
+          min-height: calc(100svh - 20px);
           border-radius: 18px;
         }
 
@@ -357,36 +369,83 @@
         }
 
         .content {
-          padding: 26px;
+          min-height: calc(100svh - 20px);
+          gap: 20px;
+          padding: 24px 22px;
         }
 
         .topline {
           align-items: start;
         }
 
+        main {
+          align-self: start;
+          max-width: none;
+        }
+
+        h1 {
+          max-width: 11ch;
+          font-size: clamp(3rem, 17vw, 4.7rem);
+          line-height: 0.92;
+        }
+
+        .lead {
+          margin-top: 18px;
+          font-size: 1.04rem;
+          line-height: 1.45;
+        }
+
         .details {
           grid-template-columns: 1fr;
+          gap: 9px;
+          margin-top: 24px;
         }
 
         .detail {
           min-height: auto;
+          padding: 13px 14px;
         }
 
         .answer-row {
-          min-height: 118px;
+          display: grid;
+          grid-template-columns: 1fr;
+          align-items: stretch;
+          gap: 10px;
+          margin-top: 22px;
+          min-height: 126px;
+        }
+
+        .yes,
+        .maybe {
+          width: 100%;
+          min-height: 50px;
+          padding-inline: 16px;
         }
 
         .maybe {
           max-width: 100%;
+          white-space: normal;
+        }
+
+        .tiny-note {
+          align-items: center;
+          min-height: 40px;
+          margin-top: 6px;
+          font-size: 0.95rem;
+        }
+
+        .note-sticker {
+          width: 30px;
         }
 
         footer {
           align-items: start;
+          gap: 12px;
         }
 
         .refusal-line {
           align-items: center;
-          max-width: 210px;
+          max-width: calc(100% - 82px);
         }
 
         .refusal-sticker {
@@ -405,6 +464,47 @@
 
         .flower span {
           inset: 7px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        body {
+          padding: 6px;
+        }
+
+        .invite {
+          min-height: calc(100svh - 12px);
+          border-radius: 14px;
+        }
+
+        .invite::before {
+          inset: 8px;
+          border-radius: 10px;
+        }
+
+        .content {
+          min-height: calc(100svh - 12px);
+          padding: 20px 18px;
+        }
+
+        h1 {
+          font-size: clamp(2.55rem, 16vw, 3.65rem);
+        }
+
+        .lead {
+          font-size: 0.98rem;
+        }
+
+        .value {
+          font-size: 0.98rem;
+        }
+
+        .refusal-line {
+          max-width: 100%;
+        }
+
+        .flowers {
+          margin-left: auto;
         }
       }
     </style>
@@ -559,10 +659,11 @@
       function updateDeclineGame() {
         const index = Math.min(declineAttempts, escapeMoves.length) - 1;
         const move = escapeMoves[Math.max(index, 0)];
+        const runScale = window.matchMedia("(max-width: 520px)").matches ? 0.45 : 1;
 
         maybe.classList.add("is-running");
-        maybe.style.setProperty("--run-x", `${move.x}px`);
-        maybe.style.setProperty("--run-y", `${move.y}px`);
+        maybe.style.setProperty("--run-x", `${Math.round(move.x * runScale)}px`);
+        maybe.style.setProperty("--run-y", `${Math.round(move.y * runScale)}px`);
         maybe.style.setProperty("--run-r", move.r);
         maybe.textContent = move.text;
         note.classList.add("has-sticker");
