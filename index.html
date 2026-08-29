@@ -6,16 +6,16 @@
     <title>date eba</title>
     <style>
       :root {
-        color-scheme: light;
-        --ink: #2f2430;
-        --muted: #745d68;
-        --paper: #fff9f6;
-        --rose: #df6f87;
-        --rose-deep: #ad3f62;
-        --mint: #7ba88c;
-        --sky: #b8d8e3;
-        --gold: #dba84f;
-        --shadow: 0 24px 70px rgba(61, 34, 47, 0.18);
+        color-scheme: dark;
+        --ink: #fff0f2;
+        --muted: #e3a1aa;
+        --paper: #1a070a;
+        --rose: #e53b56;
+        --rose-deep: #9f1029;
+        --blood: #6d0618;
+        --night: #090406;
+        --gold: #f0c775;
+        --shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
       }
 
       * {
@@ -31,8 +31,9 @@
           "Segoe UI", sans-serif;
         color: var(--ink);
         background:
-          linear-gradient(135deg, rgba(184, 216, 227, 0.82), rgba(255, 249, 246, 0.92) 42%, rgba(244, 196, 202, 0.86)),
-          repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.34) 0 1px, transparent 1px 15px);
+          radial-gradient(circle at 18% 18%, rgba(229, 59, 86, 0.34), transparent 28%),
+          radial-gradient(circle at 82% 12%, rgba(240, 199, 117, 0.14), transparent 24%),
+          linear-gradient(135deg, #090406 0%, #21070d 52%, #5b0616 100%);
         display: grid;
         place-items: center;
         padding: 28px;
@@ -44,11 +45,11 @@
         width: min(100%, 760px);
         min-height: min(760px, calc(100vh - 56px));
         overflow: hidden;
-        border: 1px solid rgba(173, 63, 98, 0.18);
+        border: 1px solid rgba(240, 199, 117, 0.28);
         border-radius: 24px;
         background:
-          linear-gradient(rgba(255, 249, 246, 0.86), rgba(255, 249, 246, 0.86)),
-          url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1400&q=80");
+          linear-gradient(145deg, rgba(22, 5, 8, 0.96), rgba(66, 7, 20, 0.9)),
+          repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 15px);
         background-position: center;
         background-size: cover;
         box-shadow: var(--shadow);
@@ -59,9 +60,175 @@
         content: "";
         position: absolute;
         inset: 18px;
-        border: 1px solid rgba(173, 63, 98, 0.25);
+        border: 1px solid rgba(240, 199, 117, 0.2);
         border-radius: 18px;
         pointer-events: none;
+      }
+
+      .invite::after {
+        content: "";
+        position: absolute;
+        inset: auto -18% -30% 35%;
+        height: 280px;
+        border-radius: 999px;
+        background: rgba(229, 59, 86, 0.18);
+        filter: blur(42px);
+        pointer-events: none;
+      }
+
+      .bat-cloud {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .bat {
+        position: absolute;
+        width: var(--bat-size, 36px);
+        height: var(--bat-size, 36px);
+        opacity: var(--bat-opacity, 0.2);
+        transform: rotate(var(--bat-rotate, 0deg));
+        background: rgba(255, 226, 210, 0.74);
+        filter: drop-shadow(0 0 12px rgba(229, 59, 86, 0.18));
+        mask: url("assets/bat-icon.svg") center / contain no-repeat;
+        -webkit-mask: url("assets/bat-icon.svg") center / contain no-repeat;
+      }
+
+      .bat-one {
+        top: 12%;
+        right: 15%;
+        --bat-size: 42px;
+        --bat-opacity: 0.16;
+        --bat-rotate: -8deg;
+      }
+
+      .bat-two {
+        top: 15%;
+        left: 9%;
+        --bat-size: 22px;
+        --bat-opacity: 0.14;
+        --bat-rotate: 12deg;
+      }
+
+      .bat-three {
+        right: 8%;
+        top: 43%;
+        --bat-size: 28px;
+        --bat-opacity: 0.11;
+        --bat-rotate: 14deg;
+      }
+
+      .bat-four {
+        left: 13%;
+        bottom: 34%;
+        --bat-size: 32px;
+        --bat-opacity: 0.1;
+        --bat-rotate: -12deg;
+      }
+
+      .bat-five {
+        right: 35%;
+        top: 30%;
+        --bat-size: 18px;
+        --bat-opacity: 0.09;
+        --bat-rotate: 6deg;
+      }
+
+      .bat-six {
+        right: 18%;
+        bottom: 18%;
+        --bat-size: 24px;
+        --bat-opacity: 0.1;
+        --bat-rotate: -14deg;
+      }
+
+      .bat-seven {
+        left: 35%;
+        bottom: 12%;
+        --bat-size: 20px;
+        --bat-opacity: 0.08;
+        --bat-rotate: 10deg;
+      }
+
+      .bat-eight {
+        left: 6%;
+        top: 52%;
+        --bat-size: 24px;
+        --bat-opacity: 0.08;
+        --bat-rotate: -4deg;
+      }
+
+      .bat-nine {
+        right: 7%;
+        bottom: 39%;
+        --bat-size: 18px;
+        --bat-opacity: 0.09;
+        --bat-rotate: 18deg;
+      }
+
+      .bat-ten {
+        left: 26%;
+        top: 7%;
+        --bat-size: 16px;
+        --bat-opacity: 0.1;
+        --bat-rotate: -16deg;
+      }
+
+      .bat-eleven {
+        right: 48%;
+        bottom: 27%;
+        --bat-size: 22px;
+        --bat-opacity: 0.08;
+        --bat-rotate: -3deg;
+      }
+
+      .bat-twelve {
+        left: 6%;
+        bottom: 15%;
+        --bat-size: 18px;
+        --bat-opacity: 0.08;
+        --bat-rotate: 9deg;
+      }
+
+      .bat-thirteen {
+        top: 8%;
+        right: 26%;
+        --bat-size: 20px;
+        --bat-opacity: 0.11;
+        --bat-rotate: 16deg;
+      }
+
+      .bat-fourteen {
+        top: 21%;
+        right: 20%;
+        --bat-size: 18px;
+        --bat-opacity: 0.1;
+        --bat-rotate: -18deg;
+      }
+
+      .bat-fifteen {
+        top: 25%;
+        right: 8%;
+        --bat-size: 24px;
+        --bat-opacity: 0.09;
+        --bat-rotate: 9deg;
+      }
+
+      .bat-sixteen {
+        top: 6%;
+        left: 43%;
+        --bat-size: 15px;
+        --bat-opacity: 0.09;
+        --bat-rotate: -10deg;
+      }
+
+      .bat-seventeen {
+        top: 18%;
+        left: 33%;
+        --bat-size: 17px;
+        --bat-opacity: 0.08;
+        --bat-rotate: 7deg;
       }
 
       .content {
@@ -95,10 +262,10 @@
         place-items: center;
         width: 54px;
         aspect-ratio: 1;
-        border: 1px solid rgba(173, 63, 98, 0.28);
+        border: 1px solid rgba(240, 199, 117, 0.34);
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.56);
-        color: var(--rose-deep);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--gold);
         font-family: Georgia, serif;
         font-size: 1.7rem;
         line-height: 1;
@@ -106,25 +273,79 @@
 
       main {
         align-self: center;
-        max-width: 620px;
+        max-width: none;
+      }
+
+      .hero-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(145px, 28vw, 215px);
+        gap: clamp(18px, 4vw, 34px);
+        align-items: center;
+      }
+
+      .copy-block {
+        max-width: 540px;
+        min-width: 0;
       }
 
       h1 {
         margin: 0;
-        max-width: 10ch;
+        max-width: 8.8ch;
         font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(3.4rem, 11vw, 7rem);
-        line-height: 0.9;
+        font-size: clamp(3.1rem, 7.5vw, 5.7rem);
+        line-height: 0.92;
         font-weight: 700;
-        color: var(--rose-deep);
+        color: var(--ink);
+        text-shadow: 0 0 22px rgba(229, 59, 86, 0.35);
+        overflow-wrap: break-word;
       }
 
       .lead {
         margin: 26px 0 0;
         max-width: 40rem;
-        color: var(--ink);
+        color: #f7cdd2;
         font-size: clamp(1.08rem, 2.6vw, 1.38rem);
         line-height: 1.55;
+      }
+
+      .portrait-row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 30px;
+      }
+
+      .vampire-card {
+        position: relative;
+        margin: 0;
+        padding: 8px;
+        border: 1px solid rgba(240, 199, 117, 0.32);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+        transform: rotate(2deg);
+      }
+
+      .leon-card {
+        width: 100%;
+      }
+
+      .vampire-card img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .vampire-card figcaption {
+        margin-top: 8px;
+        color: var(--gold);
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-align: center;
+        text-transform: uppercase;
       }
 
       .details {
@@ -137,9 +358,9 @@
       .detail {
         min-height: 92px;
         padding: 16px;
-        border: 1px solid rgba(173, 63, 98, 0.16);
+        border: 1px solid rgba(240, 199, 117, 0.18);
         border-radius: 8px;
-        background: rgba(255, 255, 255, 0.58);
+        background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(10px);
       }
 
@@ -155,7 +376,7 @@
       .value {
         display: block;
         margin-top: 9px;
-        color: var(--ink);
+        color: #fff7f0;
         font-size: clamp(0.98rem, 2.2vw, 1.12rem);
         line-height: 1.2;
         font-weight: 760;
@@ -181,9 +402,9 @@
         border: 0;
         border-radius: 999px;
         padding: 0 22px;
-        background: var(--rose-deep);
+        background: linear-gradient(135deg, var(--rose), var(--blood));
         color: #fff;
-        box-shadow: 0 12px 24px rgba(173, 63, 98, 0.24);
+        box-shadow: 0 12px 24px rgba(229, 59, 86, 0.28);
         cursor: pointer;
         font-weight: 800;
         transform-origin: center;
@@ -198,15 +419,15 @@
         transform: scale(1.05);
         box-shadow:
           0 16px 30px rgba(173, 63, 98, 0.28),
-          0 0 0 7px rgba(223, 111, 135, 0.12);
+          0 0 0 7px rgba(229, 59, 86, 0.15);
       }
 
       .maybe {
         min-height: 48px;
-        border: 1px solid rgba(47, 36, 48, 0.18);
+        border: 1px solid rgba(240, 199, 117, 0.22);
         border-radius: 999px;
         padding: 0 18px;
-        background: rgba(255, 255, 255, 0.58);
+        background: rgba(255, 255, 255, 0.09);
         color: var(--ink);
         cursor: pointer;
         font-weight: 750;
@@ -225,9 +446,9 @@
       }
 
       .maybe.is-running {
-        border-color: rgba(173, 63, 98, 0.28);
-        background: rgba(255, 255, 255, 0.76);
-        box-shadow: 0 12px 22px rgba(61, 34, 47, 0.12);
+        border-color: rgba(240, 199, 117, 0.34);
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 12px 22px rgba(0, 0, 0, 0.26);
       }
 
       .maybe.is-surrendered {
@@ -250,32 +471,17 @@
         max-width: 100%;
         margin: 12px 0 0;
         min-height: 24px;
-        color: var(--rose-deep);
+        color: #ff9aaa;
         font-weight: 800;
         line-height: 1.35;
       }
 
-      .note-sticker {
-        display: none;
-        width: 28px;
-        aspect-ratio: 1;
-        border-radius: 8px;
-        object-fit: cover;
-        transform: rotate(4deg) translateY(-1px);
-        filter: drop-shadow(0 5px 7px rgba(61, 34, 47, 0.14));
-      }
-
-      .tiny-note.has-sticker .note-sticker {
-        display: inline-block;
-      }
-
       footer {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
         gap: 20px;
-        align-items: end;
-        color: var(--muted);
+        align-items: center;
+        color: #f0c8ce;
         font-size: clamp(0.88rem, 2vw, 0.98rem);
         line-height: 1.45;
       }
@@ -283,72 +489,43 @@
       .refusal-line {
         display: inline-flex;
         align-items: center;
-        gap: 9px;
         min-width: 0;
+        font-weight: 850;
       }
 
-      .refusal-sticker {
-        width: clamp(42px, 8vw, 64px);
+      .footer-mark {
+        display: inline-flex;
+        align-items: center;
+        color: var(--gold);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        line-height: 1;
+      }
+
+      .footer-stickers {
+        display: flex;
+        align-items: end;
+        gap: 12px;
+      }
+
+      .sidekick-sticker {
+        width: clamp(50px, 8vw, 66px);
         aspect-ratio: 1;
-        flex: 0 0 auto;
+        border: 1px solid rgba(240, 199, 117, 0.32);
         border-radius: 12px;
         object-fit: cover;
-        transform: rotate(-7deg) translateY(-2px);
-        filter: drop-shadow(0 10px 12px rgba(61, 34, 47, 0.16));
+        transform: rotate(-6deg);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
       }
 
-      .signature {
-        color: var(--ink);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(1.5rem, 4vw, 2.3rem);
-      }
-
-      .flowers {
-        display: grid;
-        grid-template-columns: repeat(3, 28px);
-        gap: 8px;
-        transform: rotate(-5deg);
-      }
-
-      .flower {
-        position: relative;
-        width: 28px;
+      .ghost-sticker {
+        width: clamp(54px, 9vw, 76px);
         aspect-ratio: 1;
-        border-radius: 50%;
-        background: var(--rose);
-      }
-
-      .flower::before,
-      .flower::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: inherit;
-      }
-
-      .flower::before {
-        transform: rotate(60deg);
-      }
-
-      .flower::after {
-        transform: rotate(120deg);
-      }
-
-      .flower:nth-child(2) {
-        background: var(--gold);
-      }
-
-      .flower:nth-child(3) {
-        background: var(--mint);
-      }
-
-      .flower span {
-        position: absolute;
-        inset: 9px;
-        z-index: 1;
-        border-radius: 999px;
-        background: #fff9f6;
+        border: 1px solid rgba(240, 199, 117, 0.28);
+        border-radius: 12px;
+        object-fit: cover;
+        transform: rotate(5deg) translateY(-6px);
+        box-shadow: 0 16px 28px rgba(0, 0, 0, 0.3);
       }
 
       @media (max-width: 680px) {
@@ -381,6 +558,19 @@
         main {
           align-self: start;
           max-width: none;
+        }
+
+        .hero-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .portrait-row {
+          justify-content: center;
+          margin-top: 18px;
+        }
+
+        .leon-card {
+          width: min(62vw, 220px);
         }
 
         h1 {
@@ -434,12 +624,9 @@
           font-size: 0.95rem;
         }
 
-        .note-sticker {
-          width: 30px;
-        }
-
         footer {
-          align-items: start;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: end;
           gap: 12px;
         }
 
@@ -448,22 +635,42 @@
           max-width: calc(100% - 82px);
         }
 
-        .refusal-sticker {
-          width: 44px;
+        .footer-mark {
+          grid-column: 2;
+          grid-row: 1;
+          margin-left: auto;
+        }
+
+        .footer-stickers {
+          grid-column: 1 / -1;
+          grid-row: 2;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: -4px;
+        }
+
+        .sidekick-sticker {
+          width: 52px;
           border-radius: 10px;
         }
 
-        .flowers {
-          grid-template-columns: repeat(3, 22px);
-          gap: 6px;
+        .ghost-sticker {
+          width: 58px;
         }
 
-        .flower {
-          width: 22px;
+        .bat-one {
+          right: 8%;
+          top: 20%;
         }
 
-        .flower span {
-          inset: 7px;
+        .bat-six,
+        .bat-seven,
+        .bat-eight,
+        .bat-eleven,
+        .bat-twelve,
+        .bat-sixteen,
+        .bat-seventeen {
+          display: none;
         }
       }
 
@@ -503,33 +710,84 @@
           max-width: 100%;
         }
 
-        .flowers {
-          margin-left: auto;
+        .leon-card {
+          width: min(64vw, 190px);
+        }
+
+        .sidekick-sticker {
+          width: 48px;
+        }
+
+        .ghost-sticker {
+          width: 52px;
+        }
+
+        .bat-one {
+          --bat-size: 30px;
+        }
+
+        .bat-two,
+        .bat-five,
+        .bat-nine,
+        .bat-ten,
+        .bat-thirteen,
+        .bat-fourteen,
+        .bat-fifteen {
+          --bat-size: 18px;
         }
       }
     </style>
   </head>
   <body>
     <article class="invite" aria-label="Convite para um date">
+      <div class="bat-cloud" aria-hidden="true">
+        <span class="bat bat-one"></span>
+        <span class="bat bat-two"></span>
+        <span class="bat bat-three"></span>
+        <span class="bat bat-four"></span>
+        <span class="bat bat-five"></span>
+        <span class="bat bat-six"></span>
+        <span class="bat bat-seven"></span>
+        <span class="bat bat-eight"></span>
+        <span class="bat bat-nine"></span>
+        <span class="bat bat-ten"></span>
+        <span class="bat bat-eleven"></span>
+        <span class="bat bat-twelve"></span>
+        <span class="bat bat-thirteen"></span>
+        <span class="bat bat-fourteen"></span>
+        <span class="bat bat-fifteen"></span>
+        <span class="bat bat-sixteen"></span>
+        <span class="bat bat-seventeen"></span>
+      </div>
       <div class="content">
         <header class="topline">
-          
+         
+          <span class="seal" aria-hidden="true">♥</span>
         </header>
 
         <main>
-          <h1>Oiii, quer sair comigo?</h1>
-          <p class="lead">
-            Domingo a noite é depressivo mas a gente pode fazer ficar legal... quer sair comigo pra um jantarzinho bacana?
-          </p>
+          <div class="hero-layout">
+            <div class="copy-block">
+              <h1>Oiii vamos sair amanhã?</h1>
+              <p class="lead">
+                E se a gente sair pra se conhecer melhor e conversarmos bem muito sobre tudo que a gente gosta em um lugar bacana? 
+              </p>
+            </div>
+            <div class="portrait-row" aria-label="Imagens do convite">
+              <figure class="vampire-card leon-card">
+                <img src="assets/vampire-date.png" alt="Imagem romântica em estilo vampiro" />
+              </figure>
+            </div>
+          </div>
 
           <section class="details" aria-label="Detalhes do convite">
             <div class="detail">
               <span class="label">Quando</span>
-              <span class="value">Domingo, 19h</span>
+              <span class="value">Sábado, 16h</span>
             </div>
             <div class="detail">
               <span class="label">Onde</span>
-              <span class="value">ZōU</span>
+              <span class="value">Kataluma Café</span>
             </div>
             <div class="detail">
               <span class="label">Tem que levar</span>
@@ -543,31 +801,26 @@
           </div>
           <p class="tiny-note" id="decline-note" aria-live="polite">
             <span class="note-text"></span>
-            <img
-              class="note-sticker"
-              src="assets/sticker-pergunta.webp"
-              alt=""
-              aria-hidden="true"
-            />
           </p>
         </main>
 
         <footer>
           <span class="refusal-line">
-            <img
-              class="refusal-sticker"
-              src="assets/sticker-recusa.webp"
-              alt=""
-              aria-hidden="true"
-            />
             <span>E não pode recusar, viu.</span>
           </span>
-          
-          <span class="flowers" aria-hidden="true">
-            <span class="flower"><span></span></span>
-            <span class="flower"><span></span></span>
-            <span class="flower"><span></span></span>
+          <span class="footer-stickers" aria-hidden="true">
+            <img
+              class="sidekick-sticker"
+              src="assets/vampire-sidekick.png"
+              alt=""
+            />
+            <img
+              class="ghost-sticker"
+              src="assets/ghostface-phone.png"
+              alt=""
+            />
           </span>
+          <span class="footer-mark" aria-hidden="true">♥</span>
         </footer>
       </div>
     </article>
@@ -603,8 +856,8 @@
             body: JSON.stringify({
               resposta: "aceitou",
               convite: "date",
-              quando: "Domingo, 19h",
-              onde: "Yoshi Ya",
+              quando: "Sábado, 16h",
+              onde: "Kataluma Café",
               mensagem: "Ela clicou em Simm, vamos",
             }),
           });
@@ -633,8 +886,8 @@
             body: JSON.stringify({
               resposta: "tentou recusar",
               convite: "date",
-              quando: "Domingo, 19h",
-              onde: "Yoshi Ya",
+              quando: "Sábado, 16h",
+              onde: "Kataluma Café",
               tentativa: 1,
               mensagem: "Ela clicou em Não vou conseguir",
             }),
@@ -645,7 +898,6 @@
       }
 
       yes.addEventListener("click", async () => {
-        note.classList.remove("has-sticker");
         noteText.textContent = "ebaa, a gente se encontra lá e come bastante😋. avisando aqui...";
         yes.classList.add("is-glowing");
         maybe.classList.remove("is-running");
@@ -666,8 +918,7 @@
         maybe.style.setProperty("--run-y", `${Math.round(move.y * runScale)}px`);
         maybe.style.setProperty("--run-r", move.r);
         maybe.textContent = move.text;
-        note.classList.add("has-sticker");
-        noteText.textContent = "Tá querendo recusar por que?";
+        noteText.textContent = "E não pode recusar";
 
         if (declineAttempts >= 4) {
           maybe.classList.add("is-surrendered");
