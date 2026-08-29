@@ -257,20 +257,6 @@
         display: none;
       }
 
-      .seal {
-        display: grid;
-        place-items: center;
-        width: 54px;
-        aspect-ratio: 1;
-        border: 1px solid rgba(240, 199, 117, 0.34);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--gold);
-        font-family: Georgia, serif;
-        font-size: 1.7rem;
-        line-height: 1;
-      }
-
       main {
         align-self: center;
         max-width: none;
@@ -286,6 +272,11 @@
       .copy-block {
         max-width: 540px;
         min-width: 0;
+      }
+
+      .question-cluster {
+        position: relative;
+        display: inline-block;
       }
 
       h1 {
@@ -476,9 +467,17 @@
         line-height: 1.35;
       }
 
+      .static-refusal-note {
+        margin: -6px 0 0;
+        color: #f0c8ce;
+        font-size: 0.96rem;
+        font-weight: 850;
+        line-height: 1.35;
+      }
+
       footer {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         gap: 20px;
         align-items: center;
         color: #f0c8ce;
@@ -486,29 +485,8 @@
         line-height: 1.45;
       }
 
-      .refusal-line {
-        display: inline-flex;
-        align-items: center;
-        min-width: 0;
-        font-weight: 850;
-      }
-
-      .footer-mark {
-        display: inline-flex;
-        align-items: center;
-        color: var(--gold);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(1.8rem, 5vw, 3rem);
-        line-height: 1;
-      }
-
-      .footer-stickers {
-        display: flex;
-        align-items: end;
-        gap: 12px;
-      }
-
       .sidekick-sticker {
+        justify-self: start;
         width: clamp(50px, 8vw, 66px);
         aspect-ratio: 1;
         border: 1px solid rgba(240, 199, 117, 0.32);
@@ -518,7 +496,12 @@
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
       }
 
+      .footer-spacer {
+        min-width: 0;
+      }
+
       .ghost-sticker {
+        justify-self: end;
         width: clamp(54px, 9vw, 76px);
         aspect-ratio: 1;
         border: 1px solid rgba(240, 199, 117, 0.28);
@@ -526,6 +509,20 @@
         object-fit: cover;
         transform: rotate(5deg) translateY(-6px);
         box-shadow: 0 16px 28px rgba(0, 0, 0, 0.3);
+      }
+
+      .dog-sticker {
+        position: absolute;
+        left: clamp(42px, 6vw, 68px);
+        bottom: 0.08em;
+        z-index: 2;
+        width: clamp(54px, 8vw, 76px);
+        aspect-ratio: 1.23;
+        border: 1px solid rgba(240, 199, 117, 0.28);
+        border-radius: 12px;
+        object-fit: cover;
+        transform: rotate(-8deg) translateY(2px);
+        box-shadow: 0 14px 26px rgba(0, 0, 0, 0.28);
       }
 
       @media (max-width: 680px) {
@@ -625,28 +622,9 @@
         }
 
         footer {
-          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-columns: auto minmax(0, 1fr) auto;
           align-items: end;
           gap: 12px;
-        }
-
-        .refusal-line {
-          align-items: center;
-          max-width: calc(100% - 82px);
-        }
-
-        .footer-mark {
-          grid-column: 2;
-          grid-row: 1;
-          margin-left: auto;
-        }
-
-        .footer-stickers {
-          grid-column: 1 / -1;
-          grid-row: 2;
-          justify-content: flex-end;
-          gap: 10px;
-          margin-top: -4px;
         }
 
         .sidekick-sticker {
@@ -656,6 +634,14 @@
 
         .ghost-sticker {
           width: 58px;
+        }
+
+        .dog-sticker {
+          left: 42px;
+          right: auto;
+          bottom: 0.12em;
+          width: 54px;
+          opacity: 0.9;
         }
 
         .bat-one {
@@ -706,10 +692,6 @@
           font-size: 0.98rem;
         }
 
-        .refusal-line {
-          max-width: 100%;
-        }
-
         .leon-card {
           width: min(64vw, 190px);
         }
@@ -720,6 +702,13 @@
 
         .ghost-sticker {
           width: 52px;
+        }
+
+        .dog-sticker {
+          left: 36px;
+          bottom: 0.14em;
+          width: 46px;
+          border-radius: 9px;
         }
 
         .bat-one {
@@ -760,15 +749,17 @@
         <span class="bat bat-seventeen"></span>
       </div>
       <div class="content">
-        <header class="topline">
-         
-          <span class="seal" aria-hidden="true">♥</span>
-        </header>
-
         <main>
           <div class="hero-layout">
             <div class="copy-block">
-              <h1>Oiii vamos sair amanhã?</h1>
+              <h1>
+                Oiii vamos sair amanhã<span class="question-cluster">?<img
+                  class="dog-sticker"
+                  src="assets/vampire-dog.png"
+                  alt=""
+                  aria-hidden="true"
+                /></span>
+              </h1>
               <p class="lead">
                 E se a gente sair pra se conhecer melhor e conversarmos bem muito sobre tudo que a gente gosta em um lugar bacana? 
               </p>
@@ -799,28 +790,26 @@
             <button class="yes" type="button">Simm, vamos😊</button>
             <button class="maybe" type="button" aria-describedby="decline-note">Não vou conseguir😔</button>
           </div>
+          <p class="static-refusal-note">E não pode recusar, viu.</p>
           <p class="tiny-note" id="decline-note" aria-live="polite">
             <span class="note-text"></span>
           </p>
         </main>
 
         <footer>
-          <span class="refusal-line">
-            
-          </span>
-          <span class="footer-stickers" aria-hidden="true">
-            <img
-              class="sidekick-sticker"
-              src="assets/vampire-sidekick.png"
-              alt=""
-            />
-            <img
-              class="ghost-sticker"
-              src="assets/ghostface-phone.png"
-              alt=""
-            />
-          </span>
-          <span class="footer-mark" aria-hidden="true">♥</span>
+          <img
+            class="sidekick-sticker"
+            src="assets/vampire-sidekick.png"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="footer-spacer" aria-hidden="true"></span>
+          <img
+            class="ghost-sticker"
+            src="assets/ghostface-phone.png"
+            alt=""
+            aria-hidden="true"
+          />
         </footer>
       </div>
     </article>
