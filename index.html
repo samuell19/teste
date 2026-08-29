@@ -898,14 +898,14 @@
       }
 
       yes.addEventListener("click", async () => {
-        noteText.textContent = "ebaa, a gente se encontra lá e come bastante😋. avisando aqui...";
+        noteText.textContent = "ebaa, a gente se encontra lá então";
         yes.classList.add("is-glowing");
         maybe.classList.remove("is-running");
 
         const notified = await notifyAcceptance();
         noteText.textContent = notified
-          ? "ebaa, a gente se encontra lá e come bastante😋."
-          : "ebaa, a gente se encontra lá e come bastante😋.";
+          ? "ebaa, a gente se encontra lá então."
+          : "ebaa, a gente se encontra lá então.";
       });
 
       function updateDeclineGame() {
