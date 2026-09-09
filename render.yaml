@@ -1,5 +1,5 @@
 services:
   - type: static_site
     name: convite-date
-    buildCommand: ""
-    staticPublishPath: .
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist

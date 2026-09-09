@@ -1,0 +1,30 @@
+{
+  "name": "date",
+  "version": "1.0.0",
+  "description": "Resident Evil cinema date experience",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuell19/teste.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/samuell19/teste/issues"
+  },
+  "homepage": "https://github.com/samuell19/teste#readme",
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "framer-motion": "^13.2.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "vite": "^8.2.2"
+  }
+}
