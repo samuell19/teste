@@ -28,48 +28,57 @@ const assets = {
 };
 
 const stages = [
-  "01 • INICIALIZAÇÃO",
-  "02 • AUDIO_CORE",
-  "03 • EVIDÊNCIAS",
-  "04 • TARGET_LOCKED",
-  "05 • CREDENCIAL",
-  "06 • MISSION ACCEPTED",
+  "01 • MANSION_ENTRY",
+  "02 • SAVE_ROOM",
+  "03 • ITEM_BOX",
+  "04 • LAB_SCAN",
+  "05 • KEYCARD_READY",
+  "06 • SAVE_COMPLETE",
 ];
 
 const evidence = [
   {
-    code: "#01_TCKT",
-    tag: "DOC_CLR // LEVEL_01",
-    subtag: "IMAX_70MM",
-    title: "EVIDÊNCIA A:",
-    title2: "TELA GRANDE",
-    detail: "Status: Decodificado - tela gigante garantida.",
-    metaA: "SECTOR: AUD-07",
-    metaB: "PERFORATION: VERIFIED",
+    code: "#01_KEY",
+    tag: "KEY_ITEM // LEVEL_01",
+    subtag: "HEART_DOOR",
+    title: "ITEM A:",
+    title2: "CHAVE DO ENCONTRO",
+    detail: "Examine: abre uma porta suspeitamente especifica para duas pessoas.",
+    metaA: "LOCK: DATE_ROOM",
+    metaB: "USE: CONFIRMED",
     image: assets.evidenceTicket,
   },
   {
-    code: "#02_BIO",
-    tag: "MUTAGEN // SEC_V",
-    subtag: "VIRAL_T",
-    title: "EVIDÊNCIA B:",
-    title2: "T-SPECIMEN",
-    detail: "Status: Possíveis criaturas biologicamente questionáveis.",
-    metaA: "CONTAINMENT: 94%",
-    metaB: "RISCO // ELEVADO",
+    code: "#02_HERB",
+    tag: "RECOVERY // GREEN+RED",
+    subtag: "FINE",
+    title: "ITEM B:",
+    title2: "ERVA COMBINADA",
+    detail: "Use: cura timidez, frio do ar-condicionado e pequenos sustos.",
+    metaA: "STATUS: FINE",
+    metaB: "MIX: MAX POTENCY",
     image: assets.evidenceAmpoule,
   },
   {
-    code: "#03_FILM",
-    tag: "EXPOSURE // 24FPS",
-    subtag: "BUTTER_CRACK",
-    title: "EVIDÊNCIA C:",
-    title2: "FOTOGRAMA",
-    detail: "Status: Pipoca provavelmente envolvida.",
-    metaA: "RATION: BUTTER_CARAMEL",
-    metaB: "SNACK_STATION: ARMED",
+    code: "#03_RIB",
+    tag: "SAVE_DATA // INK_RIBBON",
+    subtag: "TYPEWRITER",
+    title: "ITEM C:",
+    title2: "FITA DE TINTA",
+    detail: "Use: registra oficialmente que esse convite nao pode ser recusado.",
+    metaA: "SAVES LEFT: 01",
+    metaB: "ROOM: SAFE",
     image: assets.evidenceFilm,
   },
+];
+
+const itemSlots = [
+  { label: "KEY", detail: "DATE_ROOM", tone: "red" },
+  { label: "HERB", detail: "FINE", tone: "green" },
+  { label: "RIBBON", detail: "SAVE", tone: "blue" },
+  { label: "MAP", detail: "CINEMA", tone: "amber" },
+  { label: "PASS", detail: "02", tone: "red" },
+  { label: "EMPTY", detail: "--", tone: "dim" },
 ];
 
 const barcodeBars = [2, 6, 0, 4, 8, 0, 4, 2, 8, 0, 4, 6];
@@ -256,6 +265,46 @@ function TerminalPill({ children }) {
   );
 }
 
+function HealthMonitor({ status = "FINE" }) {
+  return (
+    <div className="health-monitor">
+      <div>
+        <span>ECG // {status}</span>
+        <strong>VITALS STABLE</strong>
+      </div>
+      <svg viewBox="0 0 260 48" role="img" aria-label={`Estado: ${status}`}>
+        <polyline points="0,27 32,27 42,17 51,34 61,10 72,38 84,27 120,27 130,22 136,31 144,18 156,27 260,27" />
+      </svg>
+    </div>
+  );
+}
+
+function InventoryGrid({ compact = false }) {
+  return (
+    <div className={`inventory-grid ${compact ? "compact" : ""}`}>
+      {itemSlots.map((item) => (
+        <div className={`inventory-slot ${item.tone}`} key={item.label}>
+          <span>{item.label}</span>
+          <b>{item.detail}</b>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TypewriterPanel({ saved = false }) {
+  return (
+    <div className="typewriter-panel">
+      <div className="typewriter-roll" />
+      <div>
+        <span>TYPEWRITER // INK RIBBON</span>
+        <strong>{saved ? "SAVE COMPLETE" : "SAVE AVAILABLE"}</strong>
+        <p>{saved ? "Convite registrado no arquivo especial." : "Uma fita de tinta foi encontrada."}</p>
+      </div>
+    </div>
+  );
+}
+
 function Waveform({ variant = "large" }) {
   const bars = variant === "mini" ? miniWave : waveBars;
   return (
@@ -279,34 +328,33 @@ function BootScreen({ onNext }) {
   return (
     <div className="boot-screen">
       <div className="micro-row top-row">
-        <span className="chip"><span className="live-dot" />FILE_001 // RE-EVO</span>
-        <span className="chip">STATUS: READY <span className="live-dot pale" /></span>
+        <span className="chip"><span className="live-dot" />S.T.A.R.S. // PRIVATE</span>
+        <span className="chip">STATUS: FINE <span className="live-dot pale" /></span>
       </div>
       <div className="boot-copy">
-        <TerminalPill>TRANSMISSÃO PRIVADA</TerminalPill>
+        <TerminalPill>ARQUIVO CONFIDENCIAL</TerminalPill>
         <h1>
-          prometi que ia
+          mansion
           <br />
-          fazer isso
+          date file
         </h1>
         <h2>
-          de um jeito
-          <br />
-          mais legal.
+          abrir?
         </h2>
+        <HealthMonitor />
         <div className="archive-line">
           <i />
-          <span>ARCHIVE-SEQ.440</span>
+          <span>LOCKED DOOR // HEART KEY REQUIRED</span>
           <i />
         </div>
         <button className="primary wide" onClick={onNext} type="button">
-          <span>[</span> COMEÇAR <span>]</span>
+          <span>[</span> USAR CHAVE <span>]</span>
         </button>
-        <p className="hint">TOQUE PARA INICIAR DESCRIPTOGRAFIA</p>
+        <p className="hint">TOQUE PARA ENTRAR NA SAFE ROOM</p>
       </div>
       <div className="micro-row bottom-row">
-          <span><span className="live-dot muted" />01 • INICIALIZAÇÃO</span>
-        <span>FRM // 24FPS</span>
+          <span><span className="live-dot muted" />01 • MANSION_ENTRY</span>
+        <span>CAM // FIXED_ANGLE</span>
       </div>
     </div>
   );
@@ -316,17 +364,18 @@ function AudioScreen({ onNext }) {
   return (
     <div className="audio-screen">
       <div className="micro-bar">
-        <span><span className="live-dot" />CANAL 02 // AUDIO_CORE</span>
+        <span><span className="live-dot" />SAVE_ROOM // AUDIO_CORE</span>
         <span className="playing">
           <span className="equalizer" aria-hidden="true"><i /><i /><i /></span>
           00:14 PLAYING
         </span>
       </div>
       <div className="headline centered">
-        <span>MEMÓRIA ACÚSTICA</span>
-        <h2>isso aqui precisava</h2>
-        <h3>da trilha certa.</h3>
+        <span>SAFE ROOM SIGNAL</span>
+        <h2>a porta fechou</h2>
+        <h3>e a música começou.</h3>
       </div>
+      <TypewriterPanel />
       <div className="turntable-wrap">
         <motion.div
           animate={{ rotate: 360 }}
@@ -353,11 +402,11 @@ function AudioScreen({ onNext }) {
         <em>HI-RES STEREO</em>
       </div>
       <button className="primary wide" onClick={onNext} type="button">
-        <span aria-hidden="true">▶</span> [ TOCAR DINNER & DIATRIBES ]
+        <span aria-hidden="true">▶</span> [ ABRIR ITEM BOX ]
       </button>
       <div className="transport-meta">
-        <span>DECIBEL RATIO: 94.2 dB</span>
-        <span>SYNC: ANALOG TAPE</span>
+        <span>INK RIBBON: 01</span>
+        <span>DOOR LOCK: CLEARED</span>
       </div>
     </div>
   );
@@ -401,23 +450,24 @@ function EvidenceScreen({ onNext }) {
   return (
     <div className="evidence-screen scrollable-content">
       <div className="section-heading left">
-        <span><span className="live-dot" />EVIDENCE_ANALYSIS // PHASE_02</span>
+        <span><span className="live-dot" />ITEM_BOX // PHASE_02</span>
         <h2>
-          ok. agora falta descobrir
+          gerenciando inventário
           <br />
-          <b>o resto do plano.</b>
+          <b>antes da próxima porta.</b>
         </h2>
-        <p><img alt="" src={assets.fingerprint} />toque nas evidências para decodificar.</p>
+        <p><img alt="" src={assets.fingerprint} />examine os itens antes de prosseguir.</p>
       </div>
+      <InventoryGrid />
       <div className="audio-log">
         <div>
-          <span>AUDIO_LOG // FREQ_44.1kHz</span>
-          <strong>02:14 / 03:00</strong>
+          <span>ITEM_BOX // CAPACITY 6</span>
+          <strong>04/06 SLOTS</strong>
         </div>
         <Waveform variant="mini" />
         <div>
-          <span>CH_01_SURROUND</span>
-          <strong>RADIAL_SYNC ACTIVE</strong>
+          <span>COMBINE: HERB + COURAGE</span>
+          <strong>STATUS: FINE</strong>
         </div>
       </div>
       <div className="evidence-list">
@@ -425,9 +475,9 @@ function EvidenceScreen({ onNext }) {
           <EvidenceCard item={item} index={index} key={item.code} />
         ))}
       </div>
-      <p className="obvious">[ acho que ficou meio óbvio, né? ]<br />3/3 CLUES ANALYZED</p>
+      <p className="obvious">[ inventário organizado. agora vai. ]<br />3/3 KEY ITEMS CHECKED</p>
       <button className="primary block" onClick={onNext} type="button">
-        ⦿ [ ANALISAR DESTINO ] &gt;
+        ⦿ [ DESCER PARA O LABORATÓRIO ] &gt;
       </button>
     </div>
   );
@@ -437,13 +487,13 @@ function RevealScreen({ onNext }) {
   return (
     <div className="reveal-screen scrollable-content">
       <div className="diag">
-        <span><i />SYS.DIAG // TARGET_LOCKED</span>
-        <span>GRID: 390x844 :: SECTOR-07</span>
+        <span><i />UMBRELLA_NET // TARGET_LOCKED</span>
+        <span>MAP: R.P.D. :: B2 LAB</span>
       </div>
       <section className="radar-card">
         <div className="radar-head">
-          <span><img alt="" src={assets.radar} />BIO-ANALYSIS IN PROGRESS</span>
-          <b>FPS: 59.9</b>
+          <span><img alt="" src={assets.radar} />BIOHAZARD SCAN IN PROGRESS</span>
+          <b>VIRAL: LOW</b>
         </div>
         <div className="reticle">
           <img alt="" src={assets.reticle} />
@@ -452,33 +502,33 @@ function RevealScreen({ onNext }) {
             className="laser"
             transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <em>SCANNING DESTINATION...</em>
-          <small>TARGET: UMBRELLA_THEATRE</small>
+          <em>SCANNING DATE DESTINATION...</em>
+          <small>TARGET: CINEMA PRIME</small>
         </div>
         <div className="resident-title">
-          <span>ARCHIVAL DOSSIER // CLASSIFIED</span>
-          <h2>RESIDENT<br />EVIL</h2>
-          <p>SURVIVAL HORROR CINEMA DATE</p>
-          <b><i />STATUS: PLAN CONFIRMED</b>
+          <span>LABORATORY DOSSIER // CLASSIFIED</span>
+          <h2>BIO<br />DATE</h2>
+          <p>SURVIVAL HORROR // TWO PLAYERS</p>
+          <b><i />STATUS: ROUTE CONFIRMED</b>
         </div>
       </section>
       <div className="photo-grid">
-        <figure><img alt="" src={assets.cinemaRoom} /><figcaption>CAM_01 // SALA_04</figcaption></figure>
-        <figure><img alt="" src={assets.popcorn} /><figcaption>RATION // POPCORN_SUPPLY</figcaption></figure>
+        <figure><img alt="" src={assets.cinemaRoom} /><figcaption>CAM_01 // DARK_ROOM</figcaption></figure>
+        <figure><img alt="" src={assets.popcorn} /><figcaption>RATION // POPCORN_HERB</figcaption></figure>
       </div>
       <div className="spec-list">
-        <Spec icon={assets.ticketIcon} label="TYPE" value="SESSAO DE CINEMA" />
-        <Spec icon={assets.maskIcon} label="GENRE" value="HORROR & TENSÃO" />
+        <Spec icon={assets.ticketIcon} label="OBJECTIVE" value="CINEMA DATE" />
+        <Spec icon={assets.maskIcon} label="CAMERA" value="FIXED ANGLES" />
         <Spec icon={assets.biohazard} label="BIOHAZARD LEVEL" value="QUESTIONÁVEL" alert />
-        <Spec icon={assets.shield} label="SURVIVAL RATE" value="PROBABLY FINE (COM PIPOCA)" alert />
+        <Spec icon={assets.shield} label="SURVIVAL RATE" value="FINE (COM PIPOCA)" alert />
       </div>
       <div className="directive">
         <span>PRIMARY DIRECTIVE</span>
         <h3>SOBREVIVER AO FILME JUNTOS.</h3>
-        <p>Mão segurada permitida durante jump scares. Trazer jaqueta adicional para hipotermia de ar-condicionado.</p>
+        <p>Mão segurada permitida durante jump scares. Levar jaqueta: ar-condicionado classificado como perigo ambiental.</p>
       </div>
       <button className="primary block squared" onClick={onNext} type="button">
-        ▣ [ EMITIR CREDENCIAL ] ▻
+        ▣ [ GERAR KEYCARD ] ▻
       </button>
     </div>
   );
@@ -505,57 +555,57 @@ function Barcode({ compact = false }) {
 
 function InviteScreen({ onAccept, onDecline, declineCount }) {
   const declineLabels = [
-    "[ preciso consultar a corporação ]",
-    "[ corporação negou a recusa ]",
-    "[ rota de fuga bloqueada ]",
-    "[ aceite a missao, agente ]",
+    "[ tentar fugir pela porta dos fundos ]",
+    "[ porta trancada: precisa de outra chave ]",
+    "[ rota bloqueada pelo sistema Umbrella ]",
+    "[ use a keycard principal, agente ]",
   ];
 
   return (
     <div className="invite-screen">
       <div className="pass-head">
-        <span><span className="live-dot" />DECRYPTED // PASS-ID: 704-RC</span>
-        <b>PROTOCOL: SURVIVE</b>
+        <span><span className="live-dot" />KEYCARD // PASS-ID: 704-RC</span>
+        <b>PROTOCOL: TWO PLAYERS</b>
       </div>
       <section className="digital-ticket">
         <div className="ticket-main">
           <div className="ticket-title-row">
             <div>
-              <span className="special"><img alt="" src={assets.maskIcon} />SPECIAL PASS</span>
-              <h2>CINEMA<br />EXPERIENCE</h2>
-              <p>RESIDENT EVIL</p>
+              <span className="special"><img alt="" src={assets.maskIcon} />R.P.D. ACCESS</span>
+              <h2>DATE<br />KEYCARD</h2>
+              <p>SURVIVAL HORROR</p>
             </div>
             <div className="mask-box"><img alt="" src={assets.maskIcon} /></div>
           </div>
           <figure className="hero-cinema">
             <img alt="" src={assets.cinemaHero} />
             <figcaption>
-              <span>IMAX PRIME IMMERSIVE</span>
-              <span>AUDIO 7.1 ATMOS</span>
+              <span>ROOM 04 // SCREEN</span>
+              <span>DINNER & DIATRIBES</span>
             </figcaption>
           </figure>
           <div className="ticket-info">
-            <span><small>DATA // TIME</small><b>SABADO // 20:30</b></span>
-            <span><small>LOCALIZACAO</small><b>CINEMARK PRIME</b></span>
+            <span><small>DATE // TIME</small><b>SÁBADO // 20:30</b></span>
+            <span><small>LOCATION</small><b>CINEMARK PRIME</b></span>
           </div>
           <div className="survival-row">
-            <span><i />SURVIVAL UNIT: 02 GUESTS</span>
-            <b>ADMIT TWO</b>
+            <span><i />PARTY: 02 SURVIVORS</span>
+            <b>CO-OP MODE</b>
           </div>
         </div>
         <div className="ticket-sep" />
         <div className="ticket-auth">
           <div>
-            <span>AUTH CODE // UMBRELLA-CLEARANCE</span>
-            <strong>SEC-HASH: 994-F42-RACCOON-SEC-02</strong>
-            <p>Validação biométrica individual na entrada.</p>
+            <span>AUTH CODE // R.P.D.-CLEARANCE</span>
+            <strong>SEC-HASH: 994-F42-SAFE-ROOM-02</strong>
+            <p>Usar na entrada. Se tocar música dramática, seguir em frente.</p>
           </div>
           <Barcode compact />
         </div>
       </section>
       <div className="proposal-copy">
-        <span>TRANSMISSÃO DIRETA RECEBIDA</span>
-        <h2>então...</h2>
+        <span>TRANSMISSÃO DO RÁDIO RECEBIDA</span>
+        <h2>agente...</h2>
         <p>topa ir comigo?</p>
       </div>
       {declineCount > 0 && (
@@ -564,12 +614,12 @@ function InviteScreen({ onAccept, onDecline, declineCount }) {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          REQ_DENIED // a corporação não autorizou essa opção.
+          DOOR_LOCKED // essa rota precisa de uma keycard que nao existe.
         </motion.div>
       )}
       <div className="choice-stack">
         <button className="primary block" onClick={onAccept} type="button">
-          <img alt="" src={assets.shield} />[ ACEITO A MISSAO ]
+          <img alt="" src={assets.shield} />[ USAR KEYCARD ]
         </button>
         <motion.button
           animate={declineCount ? { x: [0, -7, 7, -4, 4, 0] } : false}
@@ -589,36 +639,37 @@ function AcceptedScreen() {
   return (
     <div className="accepted-screen">
       <div className="accepted-head">
-        <span><span className="live-dot" />STATUS // MISSION ACCEPTED</span>
-        <b>CLEARANCE_LVL // 02</b>
+        <span><span className="live-dot" />STATUS // SAVE COMPLETE</span>
+        <b>CLEARANCE_LVL // CO-OP</b>
       </div>
+      <TypewriterPanel saved />
       <section className="physical-ticket">
         <div className="physical-main">
           <div className="ticket-top">
-            <span>PROTOCOL // SPEC-OPS</span>
+            <span>PROTOCOL // SAFE_ROOM</span>
             <b>SEC // TKT-9941</b>
           </div>
-          <h2>CINEMA<br />NIGHT</h2>
-          <p>Sessão Reservada • Poltronas Centrais</p>
+          <h2>SAVE<br />DATA</h2>
+          <p>Missão registrada • dois jogadores</p>
           <figure>
             <img alt="" src={assets.finalCinema} />
             <figcaption>SALA 04 // IMAX DUAL</figcaption>
           </figure>
-          <strong className="stamp">[ CONFIRMADO // ADMIT 2 ]</strong>
+          <strong className="stamp">[ SAVED // CO-OP DATE ]</strong>
           <div className="date-access">
-            <span><small>DATA & HORA</small><b>SEX •<br />21:30</b></span>
-            <span><small>ACESSO VIP</small><b>2<br />INGRESSOS</b></span>
+            <span><small>DATA & HORA</small><b>SÁB •<br />20:30</b></span>
+            <span><small>STATUS</small><b>FINE<br />+2</b></span>
           </div>
         </div>
         <aside>
-          <span>PASS // 02</span>
+          <span>ITEM // PASS</span>
           <Barcode />
-          <small>HEX: #85221F</small>
+          <small>BOX: DATE_KEY</small>
         </aside>
       </section>
       <div className="done-copy">
-        <h2>fechado :)</h2>
-        <p>agora era só isso mesmo. promessa cumprida.</p>
+        <h2>save completo :)</h2>
+        <p>arquivo salvo. agora é só sobreviver ao filme juntos.</p>
       </div>
       <div className="final-wave">
         <div><span><i />AUDIO FREQ // MONITORED</span><b>44.1 kHz</b></div>
@@ -628,7 +679,7 @@ function AcceptedScreen() {
         <button onClick={downloadTicket} type="button"><img alt="" src={assets.download} />[ SALVAR INGRESSO ]</button>
         <button onClick={downloadCalendar} type="button"><img alt="" src={assets.calendar} />[ ADICIONAR À AGENDA ]</button>
       </div>
-      <p className="transmission-end">TRANSMISSÃO ENCERRADA • VEJO VOCÊ NO CINEMA</p>
+      <p className="transmission-end">TRANSMISSÃO ENCERRADA • VEJO VOCÊ NA SAFE ROOM</p>
     </div>
   );
 }
