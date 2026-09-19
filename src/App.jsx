@@ -206,7 +206,7 @@ function Header({ stage, audioOn, onToggleAudio }) {
     <header className="hud header">
       <div className="hud-left">
         <span className="live-dot" />
-        <span>FILE // RE-DATE-EXP</span>
+        <span>FILE // RE-EXP</span>
       </div>
       <button className="audio-chip" onClick={onToggleAudio} type="button">
         <span className="equalizer" aria-hidden="true">
@@ -566,7 +566,7 @@ function InviteScreen({ onAccept, onDecline, declineCount }) {
           <div className="ticket-title-row">
             <div>
               <span className="special"><img alt="" src={assets.maskIcon} />R.P.D. ACCESS</span>
-              <h2>DATE<br />KEYCARD</h2>
+              <h2>KEYCARD</h2>
               <p>SURVIVAL HORROR</p>
             </div>
             <div className="mask-box"><img alt="" src={assets.maskIcon} /></div>
