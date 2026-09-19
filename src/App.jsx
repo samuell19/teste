@@ -19,6 +19,7 @@ const assets = {
   cinemaRoom: "/assets/figma/cinema-room.png",
   popcorn: "/assets/figma/popcorn.png",
   cinemaHero: "/assets/figma/cinema-hero.png",
+  moviePoster: "/assets/figma/resident-evil-poster.png",
   finalCinema: "/assets/figma/final-cinema.png",
   ticketIcon: "/assets/figma/ticket-icon.svg",
   maskIcon: "/assets/figma/mask-icon.svg",
@@ -30,10 +31,9 @@ const assets = {
 const stages = [
   "01 • MANSION_ENTRY",
   "02 • SAVE_ROOM",
-  "03 • ITEM_BOX",
-  "04 • LAB_SCAN",
-  "05 • KEYCARD_READY",
-  "06 • SAVE_COMPLETE",
+  "03 • LAB_SCAN",
+  "04 • KEYCARD_READY",
+  "05 • SAVE_COMPLETE",
 ];
 
 const evidence = [
@@ -101,8 +101,8 @@ function notify(resposta, extras = {}) {
     body: JSON.stringify({
       resposta,
       convite: "Resident Evil Cinema Date Experience",
-      quando: "Sábado, 20:30",
-      onde: "Cinemark Prime",
+      quando: "Segunda, 17:20",
+      onde: "Cinemark",
       ...extras,
     }),
   }).catch(() => {});
@@ -258,7 +258,7 @@ function Shell({ children, stage, audioOn, onToggleAudio, tall = false }) {
 
 function TerminalPill({ children }) {
   return (
-    <span className="terminal-pill">
+    <span className={`terminal-pill ${children ? "" : "icon-only"}`}>
       <img alt="" src={assets.lock} />
       {children}
     </span>
@@ -299,7 +299,7 @@ function TypewriterPanel({ saved = false }) {
       <div>
         <span>TYPEWRITER // INK RIBBON</span>
         <strong>{saved ? "SAVE COMPLETE" : "SAVE AVAILABLE"}</strong>
-        <p>{saved ? "Convite registrado no arquivo especial." : "Uma fita de tinta foi encontrada."}</p>
+        <p>{saved ? "Convite registrado." : "Uma fita de tinta foi encontrada."}</p>
       </div>
     </div>
   );
@@ -332,14 +332,12 @@ function BootScreen({ onNext }) {
         <span className="chip">STATUS: FINE <span className="live-dot pale" /></span>
       </div>
       <div className="boot-copy">
-        <TerminalPill>ARQUIVO CONFIDENCIAL</TerminalPill>
+        <TerminalPill />
         <h1>
-          mansion
-          <br />
-          date file
+          quer sair
         </h1>
         <h2>
-          abrir?
+          comigo?
         </h2>
         <HealthMonitor />
         <div className="archive-line">
@@ -350,7 +348,7 @@ function BootScreen({ onNext }) {
         <button className="primary wide" onClick={onNext} type="button">
           <span>[</span> USAR CHAVE <span>]</span>
         </button>
-        <p className="hint">TOQUE PARA ENTRAR NA SAFE ROOM</p>
+        <p className="hint">TOQUE PARA ABRIR SEU CONVITE</p>
       </div>
       <div className="micro-row bottom-row">
           <span><span className="live-dot muted" />01 • MANSION_ENTRY</span>
@@ -372,10 +370,9 @@ function AudioScreen({ onNext }) {
       </div>
       <div className="headline centered">
         <span>SAFE ROOM SIGNAL</span>
-        <h2>a porta fechou</h2>
-        <h3>e a música começou.</h3>
+        <h2>antes de tudo,</h2>
+        <h3>que tal uma música?</h3>
       </div>
-      <TypewriterPanel />
       <div className="turntable-wrap">
         <motion.div
           animate={{ rotate: 360 }}
@@ -402,7 +399,7 @@ function AudioScreen({ onNext }) {
         <em>HI-RES STEREO</em>
       </div>
       <button className="primary wide" onClick={onNext} type="button">
-        <span aria-hidden="true">▶</span> [ ABRIR ITEM BOX ]
+        <span aria-hidden="true">▶</span> [ ABRIR DOSSIÊ ]
       </button>
       <div className="transport-meta">
         <span>INK RIBBON: 01</span>
@@ -507,8 +504,8 @@ function RevealScreen({ onNext }) {
         </div>
         <div className="resident-title">
           <span>LABORATORY DOSSIER // CLASSIFIED</span>
-          <h2>BIO<br />DATE</h2>
-          <p>SURVIVAL HORROR // TWO PLAYERS</p>
+          <h2 className="lowercase-title">vamos nos<br />ver?</h2>
+          <p>cinema // eu e você</p>
           <b><i />STATUS: ROUTE CONFIRMED</b>
         </div>
       </section>
@@ -517,15 +514,15 @@ function RevealScreen({ onNext }) {
         <figure><img alt="" src={assets.popcorn} /><figcaption>RATION // POPCORN_HERB</figcaption></figure>
       </div>
       <div className="spec-list">
-        <Spec icon={assets.ticketIcon} label="OBJECTIVE" value="CINEMA DATE" />
-        <Spec icon={assets.maskIcon} label="CAMERA" value="FIXED ANGLES" />
-        <Spec icon={assets.biohazard} label="BIOHAZARD LEVEL" value="QUESTIONÁVEL" alert />
-        <Spec icon={assets.shield} label="SURVIVAL RATE" value="FINE (COM PIPOCA)" alert />
+        <Spec icon={assets.ticketIcon} label="OBJECTIVE" value="SAIRMOS JUNTOS" />
+        <Spec icon={assets.maskIcon} label="PARTY" value="EU E VOCÊ" />
+        <Spec icon={assets.biohazard} label="KEY ITEM" value="CONVITE" alert />
+        <Spec icon={assets.shield} label="STATUS" value="PRONTO" alert />
       </div>
       <div className="directive">
-        <span>PRIMARY DIRECTIVE</span>
-        <h3>SOBREVIVER AO FILME JUNTOS.</h3>
-        <p>Mão segurada permitida durante jump scares. Levar jaqueta: ar-condicionado classificado como perigo ambiental.</p>
+        <span>OBJETIVO PRINCIPAL</span>
+        <h3>ASSISTIR UM FILME COM VOCÊ.</h3>
+        <p>Ficar perto de você, te dar suas lembrancinhas, além da gente conversar muito sobre o filme depois.</p>
       </div>
       <button className="primary block squared" onClick={onNext} type="button">
         ▣ [ GERAR KEYCARD ] ▻
@@ -555,10 +552,7 @@ function Barcode({ compact = false }) {
 
 function InviteScreen({ onAccept, onDecline, declineCount }) {
   const declineLabels = [
-    "[ tentar fugir pela porta dos fundos ]",
-    "[ porta trancada: precisa de outra chave ]",
-    "[ rota bloqueada pelo sistema Umbrella ]",
-    "[ use a keycard principal, agente ]",
+    "[ não vou poder :( ]",
   ];
 
   return (
@@ -577,16 +571,20 @@ function InviteScreen({ onAccept, onDecline, declineCount }) {
             </div>
             <div className="mask-box"><img alt="" src={assets.maskIcon} /></div>
           </div>
-          <figure className="hero-cinema">
-            <img alt="" src={assets.cinemaHero} />
-            <figcaption>
-              <span>ROOM 04 // SCREEN</span>
-              <span>DINNER & DIATRIBES</span>
-            </figcaption>
-          </figure>
+          <div className="keycard-feature">
+            <figure className="movie-poster">
+              <img alt="Pôster de Resident Evil" src={assets.moviePoster} />
+              <figcaption>POSTER // TARGET</figcaption>
+            </figure>
+            <div className="poster-details">
+              <span>INGRESSO DIGITAL</span>
+              <strong>RESIDENT EVIL</strong>
+              <p>DATA: SEGUNDA // 17:20<br />LOCAL: CINEMARK</p>
+            </div>
+          </div>
           <div className="ticket-info">
-            <span><small>DATE // TIME</small><b>SÁBADO // 20:30</b></span>
-            <span><small>LOCATION</small><b>CINEMARK PRIME</b></span>
+            <span><small>DATE // TIME</small><b>SEGUNDA // 17:20</b></span>
+            <span><small>LOCATION</small><b>CINEMARK</b></span>
           </div>
           <div className="survival-row">
             <span><i />PARTY: 02 SURVIVORS</span>
@@ -598,15 +596,14 @@ function InviteScreen({ onAccept, onDecline, declineCount }) {
           <div>
             <span>AUTH CODE // R.P.D.-CLEARANCE</span>
             <strong>SEC-HASH: 994-F42-SAFE-ROOM-02</strong>
-            <p>Usar na entrada. Se tocar música dramática, seguir em frente.</p>
           </div>
           <Barcode compact />
         </div>
       </section>
       <div className="proposal-copy">
         <span>TRANSMISSÃO DO RÁDIO RECEBIDA</span>
-        <h2>agente...</h2>
-        <p>topa ir comigo?</p>
+        <h2>e aí...</h2>
+        <p>vamos?</p>
       </div>
       {declineCount > 0 && (
         <motion.div
@@ -614,12 +611,12 @@ function InviteScreen({ onAccept, onDecline, declineCount }) {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          DOOR_LOCKED // essa rota precisa de uma keycard que nao existe.
+          ACCESS_DENIED // recusar este convite é proibido pelo protocolo.
         </motion.div>
       )}
       <div className="choice-stack">
         <button className="primary block" onClick={onAccept} type="button">
-          <img alt="" src={assets.shield} />[ USAR KEYCARD ]
+          <img alt="" src={assets.shield} />[ sim!! ]
         </button>
         <motion.button
           animate={declineCount ? { x: [0, -7, 7, -4, 4, 0] } : false}
@@ -657,7 +654,7 @@ function AcceptedScreen() {
           </figure>
           <strong className="stamp">[ SAVED // CO-OP DATE ]</strong>
           <div className="date-access">
-            <span><small>DATA & HORA</small><b>SÁB •<br />20:30</b></span>
+            <span><small>DATA & HORA</small><b>SEG •<br />17:20</b></span>
             <span><small>STATUS</small><b>FINE<br />+2</b></span>
           </div>
         </div>
@@ -669,55 +666,14 @@ function AcceptedScreen() {
       </section>
       <div className="done-copy">
         <h2>save completo :)</h2>
-        <p>arquivo salvo. agora é só sobreviver ao filme juntos.</p>
+        <p>arquivo salvo. agora é só nos encontrarmos. (e me deixe ficar perto de você dessa vez🙄</p>
       </div>
       <div className="final-wave">
         <div><span><i />AUDIO FREQ // MONITORED</span><b>44.1 kHz</b></div>
         <Waveform variant="mini" />
       </div>
-      <div className="final-actions">
-        <button onClick={downloadTicket} type="button"><img alt="" src={assets.download} />[ SALVAR INGRESSO ]</button>
-        <button onClick={downloadCalendar} type="button"><img alt="" src={assets.calendar} />[ ADICIONAR À AGENDA ]</button>
-      </div>
       <p className="transmission-end">TRANSMISSÃO ENCERRADA • VEJO VOCÊ NA SAFE ROOM</p>
     </div>
-  );
-}
-
-function downloadText(filename, contents, type) {
-  const blob = new Blob([contents], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadTicket() {
-  downloadText(
-    "resident-evil-cinema-date.txt",
-    "MISSION ACCEPTED\nCinema Night - Resident Evil\nSábado // 20:30\nCinemark Prime\nSurvival Unit: 02 guests\n",
-    "text/plain;charset=utf-8",
-  );
-}
-
-function downloadCalendar() {
-  downloadText(
-    "resident-evil-cinema-date.ics",
-    [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "BEGIN:VEVENT",
-      "SUMMARY:Resident Evil Cinema Date",
-      "DESCRIPTION:Sobreviver ao filme juntos.",
-      "LOCATION:Cinemark Prime",
-      "DTSTART:20260912T203000",
-      "DTEND:20260912T233000",
-      "END:VEVENT",
-      "END:VCALENDAR",
-    ].join("\n"),
-    "text/calendar;charset=utf-8",
   );
 }
 
@@ -738,7 +694,7 @@ export default function App() {
 
   const accept = () => {
     notify("aceitou", { mensagem: "Ela aceitou a missao" });
-    setStage(5);
+    setStage(4);
   };
 
   const decline = () => {
@@ -751,7 +707,6 @@ export default function App() {
   const content = [
     <BootScreen onNext={next} />,
     <AudioScreen onNext={next} />,
-    <EvidenceScreen onNext={next} />,
     <RevealScreen onNext={next} />,
     <InviteScreen onAccept={accept} onDecline={decline} declineCount={declineCount} />,
     <AcceptedScreen />,
@@ -762,7 +717,7 @@ export default function App() {
       audioOn={audioOn}
       onToggleAudio={audioOn ? stop : start}
       stage={currentStage}
-      tall={stage === 2 || stage === 3 || stage === 4 || stage === 5}
+      tall={stage >= 2}
     >
       {content}
     </Shell>

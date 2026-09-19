@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="326" height="176" viewBox="0 0 326 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Rotating sweep line via SVG" opacity="0.4">
+<path id="Vector" d="M16.3 88C16.3 131.712 82.0341 167.2 163 167.2C243.966 167.2 309.7 131.712 309.7 88C309.7 44.2883 243.966 8.8 163 8.8C82.0341 8.8 16.3 44.2883 16.3 88V88" stroke="#5B403D" stroke-width="1.255" stroke-dasharray="5.02 7.53"/>
+<path id="Vector_2" d="M71.72 88C71.72 115.198 112.621 137.28 163 137.28C213.379 137.28 254.28 115.198 254.28 88C254.28 60.8016 213.379 38.72 163 38.72C112.621 38.72 71.72 60.8016 71.72 88V88" stroke="#5B403D" stroke-width="1.255"/>
+<g id="Vector_3">
+<path d="M163 8.8V167.2V8.8" fill="black"/>
+<path d="M163 8.8V167.2V8.8" stroke="#353534" stroke-width="1.255"/>
+</g>
+<g id="Vector_4">
+<path d="M16.3 88H309.7H16.3" fill="black"/>
+<path d="M16.3 88H309.7H16.3" stroke="#353534" stroke-width="1.255"/>
+</g>
+</g>
+</svg>
