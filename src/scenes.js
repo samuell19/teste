@@ -2,7 +2,7 @@ const path = (name, version = 2) => `/castle/${name}.webp?v=${version}`;
 
 export const scenes = {
   exterior: {
-    title: "O castelo", subtitle: "uma noite só sua", image: path("exterior", 3), ratio: 736 / 1308, focus: .5,
+    title: "O castelo", image: path("exterior", 3), ratio: 736 / 1308, focus: .5,
     description: "Castelo gótico sob uma lua cheia, com portões de ferro e uma escadaria iluminada.",
     hotspots: [
       { id: "enter", label: "Entrar no castelo", x: 53, y: 67, w: 38, h: 36, to: "hall", invisible: true },
@@ -28,28 +28,28 @@ export const scenes = {
     hotspots: [
       { id: "song", label: "Uma música para você", x: 49, y: 56, w: 9, h: 13, type: "song", prop: "record" },
       { id: "note", label: "Ler a carta", x: 43, y: 58, w: 7, h: 9, type: "note", prop: "letter" },
-      { id: "photo", label: "Uma lembrança", x: 41, y: 19, w: 10, h: 26, type: "photo", icon: "photo" },
+      { id: "photo", label: "Uma lembrança", x: 35.5, y: 57, w: 7, h: 12, type: "photo", prop: "frame" },
       { id: "exit", label: "Voltar à sala de estar", x: 89, y: 63, w: 12, h: 24, to: "hall", icon: "door" },
     ],
     fire: { x: 41, y: 47 }, motes: "embers",
   },
   library: {
-    title: "Biblioteca", image: path("library"), ratio: 1300 / 700, focus: .49,
+    title: "Biblioteca", image: path("library"), ratio: 1300 / 700, focus: .49, petFocus: .47,
     description: "Biblioteca gótica pintada com grandes colunas, livros e corredores secretos.",
     hotspots: [
       { id: "song", label: "Examinar o livro musical", x: 53, y: 79, w: 9, h: 15, type: "song", prop: "book" },
       { id: "note", label: "Uma carta nas entrelinhas", x: 58.5, y: 78, w: 7, h: 11, type: "note", prop: "letter" },
-      { id: "photo", label: "Uma lembrança guardada", x: 86, y: 52, w: 12, h: 21, type: "photo", icon: "photo" },
+      { id: "photo", label: "Uma lembrança guardada", x: 45.5, y: 78, w: 7, h: 12, type: "photo", prop: "frame" },
       { id: "exit", label: "Voltar à sala de estar", x: 44, y: 64, w: 10, h: 20, to: "hall", icon: "door" },
     ], motes: "dust",
   },
   chapel: {
-    title: "Salão dos vitrais", subtitle: "uma dança à meia-noite", image: path("chapel"), ratio: 1300 / 730, focus: .5,
+    title: "Salão dos vitrais", subtitle: "uma dança à meia-noite", image: path("chapel"), ratio: 1300 / 730, focus: .5, petFocus: .46,
     description: "Salão de castelo com vitrais vermelhos, pilares e um trono ao fundo.",
     hotspots: [
       { id: "song", label: "A música deste salão", x: 53, y: 81, w: 9, h: 15, type: "song", prop: "record" },
-      { id: "note", label: "Uma carta no salão", x: 64, y: 81, w: 7, h: 11, type: "note", prop: "letter" },
-      { id: "photo", label: "A luz dos vitrais", x: 46, y: 49, w: 9, h: 25, type: "photo", icon: "photo" },
+      { id: "note", label: "Uma carta no salão", x: 59.5, y: 81, w: 7, h: 11, type: "note", prop: "letter" },
+      { id: "photo", label: "A luz dos vitrais", x: 44.5, y: 80, w: 7, h: 12, type: "photo", prop: "frame" },
       { id: "exit", label: "Voltar à sala de estar", x: 9, y: 74, w: 13, h: 25, to: "hall", icon: "door" },
     ], motes: "embers",
   },
@@ -59,7 +59,7 @@ export const scenes = {
     hotspots: [
       { id: "song", label: "Uma música à mesa", x: 51, y: 69, w: 8, h: 13, type: "song", prop: "record" },
       { id: "note", label: "Uma carta à sua espera", x: 42, y: 60, w: 7, h: 10, type: "note", prop: "letter" },
-      { id: "photo", label: "Guardar uma lembrança", x: 65, y: 70, w: 8, h: 13, type: "photo", prop: "frame" },
+      { id: "photo", label: "Guardar uma lembrança", x: 56.5, y: 68, w: 7, h: 12, type: "photo", prop: "frame" },
       { id: "exit", label: "Voltar à sala de estar", x: 26, y: 42, w: 13, h: 24, to: "hall", icon: "door" },
     ], motes: "dust",
   },

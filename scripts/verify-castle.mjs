@@ -81,7 +81,8 @@ try {
   await page.getByRole("button", { name: "Desembrulhar", exact: true }).click();
   await page.waitForTimeout(350);
   await page.screenshot({ path: path.join(destination, "06-mobile-birthday.png") });
-  assert.ok((await page.locator(".birthday-view").innerText()).includes("Feliz aniversário"));
+  assert.ok((await page.locator(".birthday-view").innerText()).includes("Fiz esse presentinho pra vc"));
+  assert.ok((await page.locator(".gift-poem").innerText()).includes("enquanto houver presas em meu coração."));
   await page.getByRole("button", { name: "Fechar", exact: true }).click();
   await page.goBack();
   await ready(page);

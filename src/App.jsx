@@ -1,12 +1,12 @@
 import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Flame, Gift, Image as ImageIcon, LoaderCircle, Mail, Moon, Music2, Pause, Play, RotateCcw, SkipBack, SkipForward, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Flame, Gift, LoaderCircle, Mail, Moon, Music2, Pause, Play, RotateCcw, SkipBack, SkipForward, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { gift, dedications } from "./content";
 import { musicRooms, scenes } from "./scenes";
 import { useSound } from "./useSound";
 import Vinny from "./Vinny";
 
-const icons = { book: BookOpen, door: DoorOpen, stairs: ArrowRight, fire: Flame, photo: ImageIcon };
+const icons = { book: BookOpen, door: DoorOpen, stairs: ArrowRight, fire: Flame };
 const storageKey = "midnight-castle-discoveries-v1";
 const sceneFromHash = () => scenes[location.hash.slice(1)] ? location.hash.slice(1) : "exterior";
 
@@ -21,21 +21,20 @@ function IconButton({ label, children, className = "", ...props }) {
   return <button type="button" className={`icon-button ${className}`} aria-label={label} title={label} {...props}>{children}</button>;
 }
 
-function Prop({ kind, found }) {
+function Prop({ kind, found, image }) {
   if (kind === "record") return <span className={`prop record ${found ? "found" : ""}`}><span className="record-label"><Music2 size={14} /></span></span>;
   if (kind === "letter") return <span className="prop envelope"><span className="wax-seal"><Moon size={10} /></span></span>;
   if (kind === "gift") return <span className="prop gift-box"><span className="gift-lid" /><span className="gift-ribbon" /><span className="gift-bow" /></span>;
   if (kind === "book") return <span className="prop old-book"><Moon size={22} /><span className="book-corner" /></span>;
-  if (kind === "frame") return <span className="prop little-frame"><Moon size={18} /></span>;
+  if (kind === "frame") return <span className="prop little-frame"><img src={image} alt="" draggable="false" /><span className="frame-stand" /></span>;
   return null;
 }
 
-function Hotspot({ spot, found, onSelect }) {
+function Hotspot({ spot, found, image, onSelect }) {
   const Icon = icons[spot.icon] || Sparkles;
   return <button type="button" className={`hotspot ${spot.prop ? "object-hotspot" : "route-hotspot"} ${spot.invisible ? "invisible-hotspot" : ""} ${found ? "discovered" : ""}`} style={{ left: `${spot.x}%`, top: `${spot.y}%`, width: `${spot.w}%`, height: `${spot.h}%` }} aria-label={spot.label} data-hotspot={spot.id} onClick={() => onSelect(spot)}>
-    {spot.prop ? <Prop kind={spot.prop} found={found} /> : !spot.invisible && <span className="gate-mark"><Icon size={19} strokeWidth={1.5} /></span>}
+    {spot.prop ? <Prop kind={spot.prop} found={found} image={image} /> : !spot.invisible && <span className="gate-mark"><Icon size={19} strokeWidth={1.5} /></span>}
     {!spot.invisible && <span className="hotspot-glint"><Sparkles size={13} strokeWidth={1.2} /></span>}
-    <span className="hotspot-label">{spot.label}</span>
   </button>;
 }
 
@@ -113,8 +112,8 @@ function Scene({ id, discoveries, onSelect, onReady, mood }) {
         <img className="scene-art" src={scene.image} srcSet={`${scene.image} 1x, ${scene.image.replace(".webp", "-detail.webp")} 2x`} alt={scene.description} draggable="false" fetchPriority="high" onLoad={() => { setArtLoaded(true); onReady(); }} onError={() => { setFailed(true); onReady(); }} />
         <div className={`atmosphere ${scene.motes}`} aria-hidden="true">{Array.from({ length: 13 }, (_, i) => <i key={i} style={{ "--x": `${8 + ((i * 37) % 85)}%`, "--delay": `${-i * 1.9}s`, "--duration": `${12 + i % 5 * 3}s` }} />)}</div>
         {scene.fire && <div className="firelight" aria-hidden="true" style={{ left: `${scene.fire.x}%`, top: `${scene.fire.y}%` }} />}
-        {scene.hotspots.map(spot => <Hotspot key={spot.id} spot={spot} found={spot.type === "song" && discoveries.includes(id)} onSelect={s => { if (!didDrag.current) approach(s); }} />)}
-        {id !== "exterior" && <Vinny width={canvasWidth} height={canvasHeight} focus={scene.focus} viewport={viewport} command={petCommand} mood={mood} visible={artLoaded && !failed} active={active} />}
+        {scene.hotspots.map(spot => <Hotspot key={spot.id} spot={spot} found={spot.type === "song" && discoveries.includes(id)} image={spot.type === "photo" ? dedications[id]?.photo || scene.image : undefined} onSelect={s => { if (!didDrag.current) approach(s); }} />)}
+        {id !== "exterior" && <Vinny width={canvasWidth} height={canvasHeight} focus={scene.petFocus ?? scene.focus} viewport={viewport} command={petCommand} mood={mood} visible={artLoaded && !failed} active={active} />}
       </div>
     </div>
     {scrollable && <div className="pan-controls" aria-label="Câmera do cenário">
@@ -197,14 +196,14 @@ function LetterView({ room, welcome }) {
 
 function PhotoView({ room }) {
   const data = dedications[room];
-  return <div className="photo-view"><p className="eyebrow">LEMBRANÇA {data.number}</p><div className="antique-photo"><img src={data.photo || scenes[room].image} alt={data.photo ? data.caption : `Ilustração de ${scenes[room].title}`} /><span className="photo-pin" /></div><h2>{data.caption}</h2><p>Algumas coisas merecem ficar guardadas.</p></div>;
+  return <div className="photo-view"><p className="eyebrow">LEMBRANÇA {data.number}</p><div className="antique-photo"><img src={data.photo || scenes[room].image} alt={data.photo ? data.caption : `Ilustração de ${scenes[room].title}`} /><span className="photo-pin" /></div><h2>{data.caption}</h2></div>;
 }
 
 function BirthdayView() {
   const [opened, setOpened] = useState(false);
-  if (!opened) return <div className="gift-view"><p className="eyebrow">ESSA PARTE É SÓ SUA</p><h2>Guardei uma última<br />surpresa.</h2><button className="gift-opening" onClick={() => setOpened(true)} aria-label="Desembrulhar presente"><Prop kind="gift" /><span><Sparkles size={20} /></span></button><p>Feito de músicas, lembranças<br />e um pouquinho de coragem.</p><button className="primary-action" onClick={() => setOpened(true)}>Desembrulhar <Gift size={17} /></button></div>;
-  return <div className="birthday-view"><div className="letter-ornament"><span /><Sparkles size={25} strokeWidth={1} /><span /></div><p className="eyebrow">QUE A VIDA TE TRAGA COISAS BONITAS</p><h2>Feliz aniversário{gift.recipient ? `,\n${gift.recipient}` : ""}.</h2><div className="birthday-letter">{gift.letter.map(p => <p key={p}>{p}</p>)}</div><p className="letter-signature">{gift.signature}</p>
-    <div className="playlist-gift"><div className="playlist-cover" style={{ backgroundImage: `url(${gift.playlistCover || scenes.exterior.image})` }}><Moon size={22} /><span>uma noite<br />só sua</span></div><div><p className="eyebrow">SUA PLAYLIST</p><h3>{gift.playlistTitle}</h3><p>Para levar um pedacinho desta noite.</p></div></div>
+  if (!opened) return <div className="gift-view"><h2>Uma última<br />coisa que fiz</h2><button className="gift-opening" onClick={() => setOpened(true)} aria-label="Desembrulhar presente"><Prop kind="gift" /></button><button className="primary-action" onClick={() => setOpened(true)}>Desembrulhar <Gift size={17} /></button></div>;
+  return <div className="birthday-view"><div className="birthday-letter">{gift.letter.map(p => <p key={p}>{p}</p>)}</div>{gift.poem && <blockquote className="gift-poem">{gift.poem}</blockquote>}
+    <div className="playlist-gift"><div className="playlist-cover" style={{ backgroundImage: `url(${gift.playlistCover || scenes.exterior.image})` }}><Moon size={22} /><span>uma noite<br />só sua</span></div><div><p className="eyebrow">SUA PLAYLIST</p><h3>{gift.playlistTitle}</h3></div></div>
     {gift.playlistUrl ? <a className="primary-action" href={gift.playlistUrl} target="_blank" rel="noreferrer"><Music2 size={18} /> Abrir sua playlist <ArrowRight size={17} /></a> : <button className="primary-action" disabled><Music2 size={18} /> Sua playlist chega em breve</button>}
   </div>;
 }
@@ -263,9 +262,9 @@ export default function App() {
     <AnimatePresence mode="wait"><motion.div key={scene} className="scene-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : .55 }}><Scene id={scene} discoveries={discoveries} onSelect={select} onReady={() => setLoaded(previous => new Set(previous).add(scene))} mood={overlay?.type} /></motion.div></AnimatePresence>
     <div className="top-shade" aria-hidden="true" /><div className="bottom-shade" aria-hidden="true" />
     <header className="game-header"><div className="header-left">{scene !== "exterior" ? <IconButton label={scene === "hall" ? "Voltar aos portões" : "Voltar à sala de estar"} onClick={() => navigate(scene === "hall" ? "exterior" : "hall")}><ArrowLeft size={19} /></IconButton> : <span className="crest"><Moon size={22} strokeWidth={1.2} /></span>}<span className="brand">À MEIA-NOITE</span></div><div className="header-tools"><IconButton label="Escolher música" className={sound.playing ? "music-playing" : ""} onClick={() => setOverlay({ type: "music" })}><Music2 size={19} /></IconButton><IconButton label={sound.enabled ? "Desligar som" : "Ligar som"} aria-pressed={sound.enabled} onClick={sound.toggleSound}>{sound.enabled ? <Volume2 size={19} /> : <VolumeX size={19} />}</IconButton>{scene !== "exterior" && <IconButton label="Abrir diário" onClick={() => setOverlay({ type: "journal" })}><BookOpen size={19} /></IconButton>}</div></header>
-    {scene !== "exterior" && <div className="room-heading" key={scene}><p className="eyebrow">{current.subtitle}</p><h1>{current.title}</h1><span className="heading-rule" /></div>}
+    {scene !== "exterior" && <div className="room-heading" key={scene}><h1>{current.title}</h1><span className="heading-rule" /></div>}
     {scene === "exterior" && <section className="entrance-copy"><div className="entrance-ornament"><span /><span /></div><p className="eyebrow">UM pequeno PRESENTE</p><h1>Um castelo feito<br />para você.</h1><p>Coloquei algumas coisinhas que me remetem a você<br />aqui dentro.</p><button className="primary-action" onClick={() => navigate("hall")}>Entrar no castelo <DoorOpen size={18} /></button><span className="entrance-signature"></span></section>}
-    {scene !== "exterior" && <footer className="game-footer"><button className="discovery-counter" aria-label={`${discoveries.length} de 4 músicas descobertas. Abrir diário`} onClick={() => setOverlay({ type: "journal" })}><span className="candle-row">{musicRooms.map(id => <Candle key={id} lit={discoveries.includes(id)} label={discoveries.includes(id) ? "Descoberta" : "Não descoberta"} />)}</span><span>{discoveries.length}<i>/</i>4</span></button><span className="footer-whisper">{scene === "hall" && discoveries.length === 4 ? "Seu presente está esperando." : scene === "secret" ? "Feito com carinho." : "Toda porta guarda alguma coisa."}</span>{scene === "hall" && <IconButton label="Ir para seu presente" className={discoveries.length === 4 ? "gift-ready" : ""} onClick={() => navigate("secret")}><Gift size={20} /></IconButton>}</footer>}
+    {scene !== "exterior" && <footer className="game-footer"><button className="discovery-counter" aria-label={`${discoveries.length} de 4 músicas descobertas. Abrir diário`} onClick={() => setOverlay({ type: "journal" })}><span className="candle-row">{musicRooms.map(id => <Candle key={id} lit={discoveries.includes(id)} label={discoveries.includes(id) ? "Descoberta" : "Não descoberta"} />)}</span><span>{discoveries.length}<i>/</i>4</span></button>{scene === "hall" && <IconButton label="Ir para seu presente" className={discoveries.length === 4 ? "gift-ready" : ""} onClick={() => navigate("secret")}><Gift size={20} /></IconButton>}</footer>}
     <AnimatePresence>{toast && !overlay && <motion.div className="discovery-toast" role="status" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}><Sparkles size={16} />{toast}</motion.div>}</AnimatePresence>
     {!loaded.has(scene) && <div className="loading-scene" role="status"><Moon size={22} /><span>Abrindo as portas…</span></div>}
     <AnimatePresence>{overlay && <Dialog label={overlay.type === "journal" ? "Seu diário" : overlay.type === "gift" ? "Seu presente de aniversário" : overlay.type === "music" ? "Suas músicas" : "Uma descoberta"} onClose={close} className={overlay.type === "note" || overlay.type === "welcome" || overlay.type === "gift" ? "paper-dialog" : ""}>

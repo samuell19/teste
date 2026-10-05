@@ -66,7 +66,6 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
 .candle-flame { width: 5px; height: 9px; margin-bottom: 3px; border: 1px solid #b9a67c45; border-radius: 65% 5% 65% 35%; transform: rotate(-20deg); }
 .candle.lit .candle-body { background: #d7c4a0; }
 .candle.lit .candle-flame { background: #ecc276; box-shadow: 0 0 9px #e9ae6570; border-color: transparent; animation: candle-flicker 2.5s infinite alternate; }
-.footer-whisper { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; font-style: italic; color: #b8b6a5; text-align: right; max-width: 190px; line-height: 1.25; }
 .gift-ready { color: #edcf90; border-color: #dcb971; animation: gift-ready 3s infinite; }
 .pan-controls { position: absolute; bottom: max(83px, calc(env(safe-area-inset-bottom) + 76px)); left: 50%; transform: translateX(-50%); z-index: 4; display: flex; align-items: center; gap: 14px; }
 .pan-controls .icon-button { width: 36px; height: 36px; min-width: 36px; background: #101a16a8; }
@@ -82,10 +81,6 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
 .hotspot-glint { position: absolute; left: calc(50% + 24px); top: calc(50% - 20px); color: #e8c385; animation: glint 4s infinite; pointer-events: none; filter: drop-shadow(0 0 4px #d8b26f66); }
 .hotspot:nth-of-type(even) .hotspot-glint { animation-delay: -1.4s; }
 .discovered .hotspot-glint { color: #a6bc98; animation: none; opacity: .5; }
-.hotspot-label { position: absolute; left: 50%; top: calc(50% + 28px); transform: translateX(-50%); white-space: nowrap; font-size: 10px; padding: 7px 10px; background: #131a15e8; border: 1px solid #d2c3a22b; border-radius: 3px; color: #eee0bf; opacity: 0; pointer-events: none; transition: opacity .2s; }
-@media (hover: hover) { .hotspot:hover .hotspot-label { opacity: 1; } }
-.hotspot:focus-visible .hotspot-label { opacity: 1; }
-.invisible-hotspot .hotspot-label { display: none; }
 .prop { display: block; position: relative; pointer-events: none; transition: transform .3s; filter: drop-shadow(0 6px 4px #0008); }
 .hotspot:hover .prop { transform: translateY(-3px) rotate(-3deg); }
 .record { width: 65px; height: 65px; border-radius: 50%; background: repeating-radial-gradient(circle at center, #191817 0px, #191817 3px, #32322c 4px, #141411 5px); transform: rotateX(38deg); border: 1px solid #80765b; }
@@ -103,7 +98,9 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
 .gift-bow::after { content: ''; position: absolute; top: -5px; left: 13px; width: 16px; height: 12px; border: 4px solid #873c40; border-radius: 50% 50% 50% 0; transform: rotate(-20deg); }
 .old-book { width: 52px; height: 64px; background: #384434; color: #c4a676; display: grid; place-items: center; border: 2px solid #8f7750; border-left: 5px solid #1d2c21; transform: rotate(-15deg); box-shadow: 3px 3px #bcb097; }
 .book-corner { position: absolute; inset: 6px; border: 1px solid #b29e6670; }
-.little-frame { display: grid; place-items: center; width: 45px; height: 57px; background: #263433; color: #b9c4b3; border: 5px ridge #ae8e55; transform: rotate(8deg); }
+.little-frame { --frame-width: clamp(44px, 7dvh, 62px); width: var(--frame-width); height: calc(var(--frame-width) * 1.25); background: #263433; border: 6px ridge #ae8e55; transform: rotate(5deg); box-shadow: 2px 3px 0 #54482f, 0 3px 5px #0007; }
+.little-frame img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.frame-stand { position: absolute; left: 7px; right: -12px; bottom: -7px; height: 8px; background: #584b31; clip-path: polygon(0 0, 77% 0, 100% 100%, 0 100%); z-index: -1; }
 .atmosphere { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .atmosphere i { position: absolute; left: var(--x); top: 105%; width: 2px; height: 2px; background: #d4be8f; opacity: 0; animation: floating-dust var(--duration) var(--delay) infinite linear; }
 .atmosphere.embers i { background: #d59361; }
@@ -160,25 +157,19 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
 .antique-photo { position: relative; aspect-ratio: 4 / 5; width: 235px; max-width: 100%; margin: 25px auto 28px; border: 12px ridge #9e824e; box-shadow: 0 7px 17px #0008; transform: rotate(-3deg); }
 .antique-photo img { width: 100%; height: 100%; object-fit: cover; }
 .photo-view h2 { font-size: 29px; line-height: 1.05; }
-.photo-view > p:last-child { color: #b8bcaa; margin-top: 14px; font-size: 11px; }
 .gift-view h2 { font-size: 39px; line-height: 1.1; margin-top: 18px; }
 .gift-opening { display: grid; place-items: center; width: 180px; height: 155px; margin: 18px auto 10px; position: relative; }
 .gift-opening .gift-box { transform: scale(1.8) rotate(-5deg); }
-.gift-opening > span:last-child { position: absolute; right: 15px; top: 18px; color: #918052; animation: glint 3s infinite; }
 .gift-opening:hover .gift-box { transform: scale(1.85) rotate(3deg); }
-.gift-view > p:not(.eyebrow) { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-style: italic; line-height: 1.4; color: #77785f; }
 .gift-view .primary-action { margin-top: 25px; }
 .birthday-view { padding-top: 46px; }
-.birthday-view > .eyebrow { margin-top: 21px; text-align: center; }
-.birthday-view h2 { font-size: 44px; line-height: 1; margin: 14px 0 25px; white-space: pre-line; text-align: center; }
 .birthday-letter p { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 21px; line-height: 1.45; margin-bottom: 14px; }
-.birthday-view .letter-signature { margin-top: 22px; }
+.gift-poem { margin: 24px 0 0; padding-top: 20px; border-top: 1px solid #8a805245; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-style: italic; line-height: 1.4; }
 .playlist-gift { display: flex; gap: 16px; align-items: center; border-top: 1px solid #8a805245; margin-top: 25px; padding-top: 25px; }
 .playlist-cover { width: 82px; aspect-ratio: 1; flex-shrink: 0; background-position: center; background-size: cover; color: #eee4c8; position: relative; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; isolation: isolate; }
 .playlist-cover::before { content: ''; position: absolute; inset: 0; background: #061c1a77; z-index: -1; }
 .playlist-cover > span { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: .9; }
 .playlist-gift h3 { font-size: 23px; line-height: 1; margin: 5px 0 7px; }
-.playlist-gift > div > p:last-child { font-size: 10px; line-height: 1.6; color: #77785f; }
 .birthday-view > .primary-action { width: 100%; margin-top: 23px; font-size: 11px; }
 .journal-view h2 { font-size: 40px; line-height: 1.02; margin-top: 14px; }
 .journal-list { margin-top: 24px; }
@@ -210,9 +201,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
   .brand { font-size: 11px; }
   .room-heading { top: 90px; }
   .room-heading h1 { font-size: 41px; }
-  .room-heading .eyebrow { font-size: 10px; }
   .game-footer { bottom: 28px; left: 38px; right: 38px; }
-  .footer-whisper { font-size: 18px; max-width: none; }
   .discovery-counter { gap: 20px; }
   .candle-row { gap: 12px; }
   .at-entrance .bottom-shade { height: 49%; }
@@ -221,7 +210,6 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
   .entrance-copy > p:not(.eyebrow) { font-size: 13px; }
   .pan-controls { bottom: 34px; }
   .at-entrance .pan-controls { top: 90px; bottom: auto; }
-  .hotspot-label { font-size: 11px; }
   .dialog { max-width: 460px; }
   .song-view, .letter-view, .photo-view, .gift-view, .birthday-view, .journal-view { padding-inline: 42px; }
 }
@@ -238,10 +226,8 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500
 @media (max-width: 360px) {
   .game-header { left: 14px; right: 14px; }
   .game-footer { left: 16px; right: 16px; gap: 8px; }
-  .footer-whisper { max-width: 125px; font-size: 13px; }
   .song-view, .letter-view, .photo-view, .gift-view, .birthday-view, .journal-view { padding-inline: 24px; }
   .room-heading h1 { font-size: 28px; }
-  .birthday-view h2 { font-size: 38px; }
   .playlist-gift { gap: 11px; }
   .playlist-gift h3 { font-size: 21px; }
 }
