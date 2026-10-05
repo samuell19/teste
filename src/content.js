@@ -24,7 +24,7 @@ export const dedications = {
     title: "Oxygen",
     note: "Porch Light foi uma das primeiras bandas que você me mostrou. Escolhi Oxygen porque você sempre cita essa música e eu também gosto bastante dela.",
     song: "Oxygen", artist: "Porch Light", audioUrl: "/music/porch-light-oxygen.m4a", spotifyUrl: "", cover: "", photo: "/photos/library-vampire.png",
-    caption: "Uma página só nossa.",
+    caption: "Nymeria",
   },
   chapel: {
     number: "III",
