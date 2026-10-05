@@ -30,9 +30,12 @@ Edit `src/content.js`:
 - `spotifyUrl`: song's Spotify link.
 - `cover`, `photo`: artwork and personal photo paths.
 
-Music and playlist URLs are empty by design. No Hozier track or previous invite
-notifications are connected to the new experience. Empty photo slots show the
-room illustration until personal photos are supplied.
+Four supplied M4A tracks live in `public/music`, one per musical room. Finding
+each track unlocks it in the music selector (musical-note icon in the header).
+Playback starts only on a visitor's action and continues between rooms. The
+selector includes pause, seeking and previous/next track controls. The final
+Spotify playlist is configured. No previous invite notifications are connected.
+Empty photo slots show the room illustration until personal photos are supplied.
 
 Discoveries are saved locally on the visitor's device. The journal can reset
 them. No responses or photos are sent to an external service.

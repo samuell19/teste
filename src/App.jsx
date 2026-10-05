@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useIsPresent, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronLeft, ChevronRight, DoorOpen, Flame, Gift, Image as ImageIcon, Mail, Moon, Music2, Pause, Play, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Flame, Gift, Image as ImageIcon, LoaderCircle, Mail, Moon, Music2, Pause, Play, RotateCcw, SkipBack, SkipForward, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { gift, dedications } from "./content";
 import { musicRooms, scenes } from "./scenes";
 import { useSound } from "./useSound";
@@ -136,11 +136,11 @@ function Dialog({ children, label, onClose, className = "" }) {
   const reduced = useReducedMotion();
   useEffect(() => {
     const element = panel.current;
-    element.querySelector("button, a, input")?.focus();
+    element.querySelector("button, a, input, select")?.focus();
     const key = (event) => {
       if (event.key === "Escape") { event.preventDefault(); onClose(); }
       if (event.key !== "Tab") return;
-      const items = [...element.querySelectorAll("button:not(:disabled),a[href],input:not(:disabled)")];
+      const items = [...element.querySelectorAll("button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled)")];
       const first = items[0], last = items.at(-1);
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
       if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
@@ -158,21 +158,28 @@ function Dialog({ children, label, onClose, className = "" }) {
 
 const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 
-function SongView({ room, sound }) {
-  const data = dedications[room];
+function SongView({ room, sound, discoveries }) {
+  const available = musicRooms.filter(id => discoveries.includes(id) && dedications[id].audioUrl);
+  const [selected, setSelected] = useState(() => room || available.find(id => dedications[id].audioUrl === sound.currentUrl) || available[0]);
+  if (!available.length) return <div className="song-view empty-music"><Music2 size={36} strokeWidth={1} /><h2>Sua trilha</h2><p className="song-artist">Nenhuma música encontrada ainda.</p></div>;
+  const data = dedications[selected || available[0]];
+  const active = sound.currentUrl === data.audioUrl;
+  const playing = active && sound.playing;
+  const loading = active && sound.loading;
+  const choose = (id) => { setSelected(id); sound.playTrack(dedications[id].audioUrl); };
+  const skip = (direction) => choose(available[(available.indexOf(selected) + direction + available.length) % available.length]);
   return <div className="song-view">
-    <p className="eyebrow">DEDICAÇÃO {data.number}</p>
-    <div className={`large-record ${sound.playing && data.audioUrl ? "is-playing" : ""}`}>
+    <div className={`large-record ${playing ? "is-playing" : ""}`}>
       <div className="vinyl-grooves" />
       <div className="vinyl-center" style={data.cover ? { backgroundImage: `url(${data.cover})` } : {}}>{!data.cover && <Moon size={30} strokeWidth={1} />}<i /></div>
     </div>
     <h2>{data.song}</h2>
     <p className="song-artist">{data.artist || "Uma música reservada para você"}</p>
-    <p className="song-dedication">{data.title}</p>
     <div className="playback">
-      <IconButton label={sound.playing ? "Pausar música" : "Ouvir música"} className="play-button" disabled={!data.audioUrl} onClick={() => sound.toggleTrack(data.audioUrl)}>{sound.playing ? <Pause size={24} /> : <Play size={24} />}</IconButton>
-      {data.audioUrl ? <div className="track-timeline"><input aria-label="Posição da música" type="range" min="0" max={sound.duration || 1} value={Math.min(sound.time, sound.duration || 1)} onChange={e => sound.seek(Number(e.target.value))} /><div><span>{formatTime(sound.time)}</span><span>{formatTime(sound.duration)}</span></div></div> : <span className="soon-note">A trilha desta sala chega em breve.</span>}
+      <IconButton label={playing || loading ? "Pausar música" : "Ouvir música"} className="play-button" disabled={!data.audioUrl} onClick={() => sound.toggleTrack(data.audioUrl)}>{loading ? <LoaderCircle className="audio-spinner" size={24} /> : playing ? <Pause size={24} /> : <Play size={24} />}</IconButton>
+      {data.audioUrl ? <div className="track-timeline"><input aria-label="Posição da música" type="range" min="0" max={active && sound.duration || 1} value={active ? Math.min(sound.time, sound.duration || 1) : 0} disabled={!active || !sound.duration} onChange={e => sound.seek(Number(e.target.value))} /><div><span>{formatTime(active ? sound.time : 0)}</span><span>{formatTime(active ? sound.duration : 0)}</span></div></div> : <span className="soon-note">A trilha desta sala chega em breve.</span>}
     </div>
+    <div className="track-picker"><label htmlFor="music-selection">Escolher música</label><div className="track-picker-row"><IconButton label="Música anterior" disabled={available.length < 2} onClick={() => skip(-1)}><SkipBack size={17} /></IconButton><div className="track-select"><select id="music-selection" value={selected || available[0]} onChange={e => choose(e.target.value)}>{musicRooms.map(id => <option key={id} value={id} disabled={!available.includes(id)}>{dedications[id].song} - {dedications[id].artist}{available.includes(id) ? "" : " (não encontrada)"}</option>)}</select><ChevronDown size={15} aria-hidden="true" /></div><IconButton label="Próxima música" disabled={available.length < 2} onClick={() => skip(1)}><SkipForward size={17} /></IconButton></div></div>
     {sound.error && <p className="audio-error" role="alert">{sound.error}</p>}
     {data.spotifyUrl && <a className="text-action" href={data.spotifyUrl} target="_blank" rel="noreferrer">Ouvir no Spotify <ArrowRight size={16} /></a>}
   </div>;
@@ -180,10 +187,10 @@ function SongView({ room, sound }) {
 
 function LetterView({ room, welcome }) {
   const data = dedications[room];
-  return <div className="letter-view"><div className="letter-ornament"><span /><Moon size={23} strokeWidth={1} /><span /></div>
-    <p className="eyebrow">{welcome ? "QUE BOM QUE VOCÊ CHEGOU" : `UMA CARTA, ${data.number}`}</p>
-    <h2>{welcome ? "Pode entrar.\nEu te esperava." : data.title}</h2>
-    <p className="handwritten-note">{welcome ? "Deixei algumas músicas e pequenos carinhos escondidos por esse castelo. Tudo foi preparado pensando em você. Fique à vontade, a noite é sua." : data.note}</p>
+  return <div className={`letter-view ${welcome ? "welcome-letter" : ""}`}><div className="letter-ornament"><span /><Moon size={23} strokeWidth={1} /><span /></div>
+    {!welcome && <p className="eyebrow">{`UMA CARTA, ${data.number}`}</p>}
+    <h2>{welcome ? "Fiz um joguinho com músicas, e coisas que me remetem a você." : data.title}</h2>
+    <p className="handwritten-note">{welcome ? "Pra jogar, é só ir navegando pelas salas e pegando as músicas. No final tem uma surpresa, mas tem que pegar tudo." : data.note}</p>
     <p className="letter-signature">{gift.signature}</p><div className="seal-large"><Moon size={25} strokeWidth={1} /></div>
   </div>;
 }
@@ -224,7 +231,7 @@ export default function App() {
 
   useEffect(() => {
     Object.values(scenes).forEach(s => { const image = new window.Image(); image.src = window.devicePixelRatio > 1 ? s.image.replace(".webp", "-detail.webp") : s.image; });
-    const back = () => { sound.pause(); setScene(sceneFromHash()); setOverlay(null); };
+    const back = () => { setScene(sceneFromHash()); setOverlay(null); };
     window.addEventListener("popstate", back);
     return () => { window.removeEventListener("popstate", back); clearTimeout(toastTimer.current); };
   }, []);
@@ -236,7 +243,7 @@ export default function App() {
 
   const navigate = (id) => {
     if (!scenes[id] || id === scene) return;
-    sound.chime(); sound.pause(); setOverlay(null);
+    sound.chime(); setOverlay(null);
     history.pushState({ room: id }, "", `#${id}`);
     setScene(id);
   };
@@ -255,18 +262,18 @@ export default function App() {
   return <main className={`castle-game ${scene === "exterior" ? "at-entrance" : "inside-castle"}`}>
     <AnimatePresence mode="wait"><motion.div key={scene} className="scene-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : .55 }}><Scene id={scene} discoveries={discoveries} onSelect={select} onReady={() => setLoaded(previous => new Set(previous).add(scene))} mood={overlay?.type} /></motion.div></AnimatePresence>
     <div className="top-shade" aria-hidden="true" /><div className="bottom-shade" aria-hidden="true" />
-    <header className="game-header"><div className="header-left">{scene !== "exterior" ? <IconButton label={scene === "hall" ? "Voltar aos portões" : "Voltar à sala de estar"} onClick={() => navigate(scene === "hall" ? "exterior" : "hall")}><ArrowLeft size={19} /></IconButton> : <span className="crest"><Moon size={22} strokeWidth={1.2} /></span>}<span className="brand">À MEIA-NOITE</span></div><div className="header-tools"><IconButton label={sound.enabled ? "Desligar som" : "Ligar som"} aria-pressed={sound.enabled} onClick={sound.toggleSound}>{sound.enabled ? <Volume2 size={19} /> : <VolumeX size={19} />}</IconButton>{scene !== "exterior" && <IconButton label="Abrir diário" onClick={() => setOverlay({ type: "journal" })}><BookOpen size={19} /></IconButton>}</div></header>
+    <header className="game-header"><div className="header-left">{scene !== "exterior" ? <IconButton label={scene === "hall" ? "Voltar aos portões" : "Voltar à sala de estar"} onClick={() => navigate(scene === "hall" ? "exterior" : "hall")}><ArrowLeft size={19} /></IconButton> : <span className="crest"><Moon size={22} strokeWidth={1.2} /></span>}<span className="brand">À MEIA-NOITE</span></div><div className="header-tools"><IconButton label="Escolher música" className={sound.playing ? "music-playing" : ""} onClick={() => setOverlay({ type: "music" })}><Music2 size={19} /></IconButton><IconButton label={sound.enabled ? "Desligar som" : "Ligar som"} aria-pressed={sound.enabled} onClick={sound.toggleSound}>{sound.enabled ? <Volume2 size={19} /> : <VolumeX size={19} />}</IconButton>{scene !== "exterior" && <IconButton label="Abrir diário" onClick={() => setOverlay({ type: "journal" })}><BookOpen size={19} /></IconButton>}</div></header>
     {scene !== "exterior" && <div className="room-heading" key={scene}><p className="eyebrow">{current.subtitle}</p><h1>{current.title}</h1><span className="heading-rule" /></div>}
-    {scene === "exterior" && <section className="entrance-copy"><div className="entrance-ornament"><span /><Sparkles size={18} strokeWidth={1} /><span /></div><p className="eyebrow">UM PRESENTE DE ANIVERSÁRIO</p><h1>Hoje, o castelo<br />é seu.</h1><p>Há músicas e pequenos carinhos<br />esperando atrás dessas portas.</p><button className="primary-action" onClick={() => navigate("hall")}>Entrar no castelo <DoorOpen size={18} /></button><span className="entrance-signature">uma noite preparada para você</span></section>}
+    {scene === "exterior" && <section className="entrance-copy"><div className="entrance-ornament"><span /><span /></div><p className="eyebrow">UM pequeno PRESENTE</p><h1>Um castelo feito<br />para você.</h1><p>Coloquei algumas coisinhas que me remetem a você<br />aqui dentro.</p><button className="primary-action" onClick={() => navigate("hall")}>Entrar no castelo <DoorOpen size={18} /></button><span className="entrance-signature"></span></section>}
     {scene !== "exterior" && <footer className="game-footer"><button className="discovery-counter" aria-label={`${discoveries.length} de 4 músicas descobertas. Abrir diário`} onClick={() => setOverlay({ type: "journal" })}><span className="candle-row">{musicRooms.map(id => <Candle key={id} lit={discoveries.includes(id)} label={discoveries.includes(id) ? "Descoberta" : "Não descoberta"} />)}</span><span>{discoveries.length}<i>/</i>4</span></button><span className="footer-whisper">{scene === "hall" && discoveries.length === 4 ? "Seu presente está esperando." : scene === "secret" ? "Feito com carinho." : "Toda porta guarda alguma coisa."}</span>{scene === "hall" && <IconButton label="Ir para seu presente" className={discoveries.length === 4 ? "gift-ready" : ""} onClick={() => navigate("secret")}><Gift size={20} /></IconButton>}</footer>}
     <AnimatePresence>{toast && !overlay && <motion.div className="discovery-toast" role="status" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}><Sparkles size={16} />{toast}</motion.div>}</AnimatePresence>
     {!loaded.has(scene) && <div className="loading-scene" role="status"><Moon size={22} /><span>Abrindo as portas…</span></div>}
-    <AnimatePresence>{overlay && <Dialog label={overlay.type === "journal" ? "Seu diário" : overlay.type === "gift" ? "Seu presente de aniversário" : "Uma descoberta"} onClose={close} className={overlay.type === "note" || overlay.type === "welcome" || overlay.type === "gift" ? "paper-dialog" : ""}>
-      {overlay.type === "song" && <SongView room={overlay.room} sound={sound} />}
+    <AnimatePresence>{overlay && <Dialog label={overlay.type === "journal" ? "Seu diário" : overlay.type === "gift" ? "Seu presente de aniversário" : overlay.type === "music" ? "Suas músicas" : "Uma descoberta"} onClose={close} className={overlay.type === "note" || overlay.type === "welcome" || overlay.type === "gift" ? "paper-dialog" : ""}>
+      {(overlay.type === "song" || overlay.type === "music") && <SongView room={overlay.room} sound={sound} discoveries={discoveries} />}
       {(overlay.type === "note" || overlay.type === "welcome") && <LetterView room={overlay.room} welcome={overlay.type === "welcome"} />}
       {overlay.type === "photo" && <PhotoView room={overlay.room} />}
       {overlay.type === "gift" && <BirthdayView />}
-      {overlay.type === "journal" && <Journal discoveries={discoveries} navigate={navigate} onClose={close} onReset={() => { setDiscoveries([]); close(); navigate("exterior"); }} />}
+      {overlay.type === "journal" && <Journal discoveries={discoveries} navigate={navigate} onClose={close} onReset={() => { sound.pause(); setDiscoveries([]); close(); navigate("exterior"); }} />}
     </Dialog>}</AnimatePresence>
     <span className="live-discoveries sr-only" aria-live="polite">{toast}</span>
   </main>;

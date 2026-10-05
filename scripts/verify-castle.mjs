@@ -52,7 +52,7 @@ try {
     await page.screenshot({ path: path.join(destination, `room-${room}-mobile.png`) });
     await select(page, "song");
     await page.getByRole("dialog").waitFor();
-    assert.equal(await page.locator(".play-button").isDisabled(), true);
+    assert.equal(await page.locator(".play-button").isDisabled(), false);
     if (room === "lounge") await page.screenshot({ path: path.join(destination, "04-mobile-music.png") });
     await page.keyboard.press("Escape");
     await page.getByRole("dialog").waitFor({ state: "hidden" });

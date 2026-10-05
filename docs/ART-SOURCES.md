@@ -31,6 +31,11 @@ No generative edits, outpainting or redraws were performed.
 Unmodified source images are preserved in `assets/castle-sources`. Only optimized
 WebP files in `public/castle` are loaded by the experience.
 
+## Memories
+
+The dining-room memory uses the user's supplied Dracula film still, clipboard
+`e51dec9d-6244-4e6a-af10-fc623b2477ef`, copied unchanged to `public/photos/dracula.png`.
+
 ## Vinny
 
 The user supplied the animated pet sheet from
@@ -47,9 +52,12 @@ lossless, transparent export of the same 1536 x 2288 sheet. The 8 x 11 grid has
 ## Personalization
 
 `src/content.js` holds the recipient name, letters, four song entries, photo URLs
-and the final playlist URL. Music URLs are intentionally empty until the user
-provides their selections. Playback and external links are only available when
-their corresponding URLs are configured.
+and the final playlist URL. The user supplied four M4A tracks: Saint Vice / KILL,
+Porch Light / Oxygen, Alcest / Ecailles de lune Pt. 1, and Sleep Token / Hypnosis.
+They are copied unchanged to `public/music` with URL-safe filenames, assigned to
+the four rooms in that order, and unlocked in the selector by discovery. The
+user's final Spotify playlist link is configured. Audio is not preloaded before
+the visitor chooses to play a track.
 
 Local files can be placed in `public/music` and `public/photos`; reference them
 as `/music/filename.mp3` and `/photos/filename.jpg`. Remote Spotify links belong
